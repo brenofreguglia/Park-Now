@@ -1,0 +1,88 @@
+login:
+
+import React, { useState } from "react";
+import { StyleSheet, View, Image, ScrollView } from "react-native";
+import { Button } from "../Componentes/Buttons";
+import { Texto, TextoInput } from "../Componentes/Textos";
+import { useNavigation } from "@react-navigation/native";
+
+export default function Login() {
+  const navigation = useNavigation();
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  const cadastrarSe = () => {
+    navigation.navigate('Cadastrar_se');
+  }
+
+  const handleLogin = () => {
+    // Lógica de autenticação
+    if (username === "usuario" && password === "senha") {
+        // Credenciais corretas, navegue para a próxima tela ou realize outra ação
+        Alert.alert("Sucesso", "Login realizado com sucesso!");
+      } else {
+        // Credenciais incorretas, exiba uma mensagem de erro
+        Alert.alert("Erro", "Nome de usuário ou senha incorretos. Por favor, tente novamente.");
+      }
+  }
+
+  return (
+    <ScrollView>
+      <View style={styles.container}>
+        <Image source={require("../../assets/Imgs/imagem.png")} style={styles.image}/>
+        <View style={styles.container_2}>
+          <TextoInput
+            style={styles.input}
+            placeholder="Nome de usuário"
+            value={username}
+            onChangeText={setUsername}
+          />
+          <TextoInput
+            style={styles.input}
+            placeholder="Senha"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+          />
+          <Button texto="Login" onPress={handleLogin}/>
+          <Texto
+            msg="Ainda não tem uma conta ?"
+            onPress={cadastrarSe}
+            style={styles.registerLink}
+          />
+        </View>
+      </View>
+    </ScrollView>
+  ) 
+}
+  
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: "#D2F0EE",
+  },
+  container_2: {
+    flex: 1,
+    backgroundColor: "#73D2C0",
+    marginTop: "10%",
+    width: "100%",
+    justifyContent: 'space-evenly',
+    alignItems: "center",
+  },
+  image: {
+    height: 250,
+    marginVertical: 30
+  },
+  input: {
+    color: "#D2F0EE",
+    width: 330,
+    borderRadius: 30,
+  },
+  registerLink: {
+    color: "red"
+  }
+});
+
