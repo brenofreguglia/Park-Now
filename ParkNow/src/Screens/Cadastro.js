@@ -52,9 +52,6 @@ const styles = StyleSheet.create({
   container_img: {
     flexDirection: "row",
     justifyContent: "flex-end",
-    // alignItems:'flex-start',
-    // alignContent:'center',
-    // marginBottom:200,
   },
   
 });

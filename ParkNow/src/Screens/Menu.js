@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#D2F0EE",
-    alignItems: "center",
+    // alignItems: "center",
     justifyContent: "center",
   },
   container_geo: {
@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
     marginTop:11,
   },
   text:{
-    alignItems:"center",
+    
     fontSize: 30,
   },
 });

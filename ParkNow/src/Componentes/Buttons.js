@@ -7,7 +7,7 @@ const Lg = Dimensions.get('screen').width
 const Button = ({texto, acao, color, tamanho, cor, largura}) => {
     return (
         <TouchableOpacity style = {[styles.botoes,{backgroundColor: color, width:largura, height:tamanho}]}  onPress={acao}>
-           <Texto msg={texto} color={cor} tamanho={20}/>
+        <Texto msg={texto} color={cor} tamanho={20}/>
         </TouchableOpacity>
 
     )
@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         width: Lg / 2,
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "center",
 
     },
 })
