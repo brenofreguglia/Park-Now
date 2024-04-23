@@ -13,10 +13,11 @@ const Drawer = createDrawerNavigator();
 export default function App() {
   return (
     <NavigationContainer>
-    <Drawer.Navigator screenOptions={{headerStyle: {backgroundColor: "#E0FFFF"}}}>
-      <Drawer.Screen name="Menu" component={Menu}/>
+    <Drawer.Navigator screenOptions={{headerStyle: {backgroundColor: "#D2F0EE"}}}>
+      
+      <Drawer.Screen name="Home" component={Menu}/>
       <Drawer.Screen name="Login" component={Login}/> 
-      <Drawer.Screen name="Cadastro" component={Cadastro}/>
+      <Drawer.Screen name="Cadastro" component={Cadastro} options={{headerStyle:{backgroundColor: "#73D2C0"}}}/>
       <Drawer.Screen name="FaleConosco" component={FaleConosco}/>
       </Drawer.Navigator>
     </NavigationContainer>

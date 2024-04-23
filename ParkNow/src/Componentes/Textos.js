@@ -10,7 +10,7 @@ const Texto = ({ msg, tamanho, color, acao, lugar, margin }) => {
     </Text>
   );
 };
-const TextoInput = ({ msg, tamanho, color, width, borda, margin, height, lugar, holder}) => {
+const TextoInput = ({ msg, tamanho, color, width, borda, margin, height, lugar, holder, cor}) => {
   return (  
     <TextInput
     placeholder = {holder}
