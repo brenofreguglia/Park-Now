@@ -3,18 +3,18 @@ import { Text, StyleSheet, Dimensions, TextInput } from "react-native";
 
 const Lg = Dimensions.get("screen").width;
 
-const Texto = ({ msg, tamanho, color }) => {
+const Texto = ({ msg, tamanho, color, acao, lugar, margin }) => {
   return (
-    <Text style={[styles.texto, { fontSize: tamanho, color: color }]}>
+    <Text style={[styles.texto, { fontSize: tamanho, color: color, alignItems: lugar, margin: margin}]} onPress={acao}>
       {msg}
     </Text>
   );
 };
-const TextoInput = ({ msg, tamanho, color, width, borda }) => {
-  return (
+const TextoInput = ({ msg, tamanho, color, width, borda, margin, height, lugar, holder}) => {
+  return (  
     <TextInput
-      placeholder="Digite Aqui"
-      style={{ backgroundColor: color, width: width, borderRadius: borda }}
+    placeholder = {holder}
+      style={{ backgroundColor: color, width: width, borderRadius: borda, margin: margin, height: height, textAlign: lugar, fontSize: tamanho, }}
     >
       {msg}
     </TextInput>
