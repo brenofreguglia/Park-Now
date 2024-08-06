@@ -88,6 +88,8 @@ app.post('/cadastro', async (req, res) => {
 app.post('/login', async (req, res) => {
     try {
       const { email, senha } = req.body;
+
+      console.log(email, senha)
   
       // Validação dos dados recebidos
       if (!email || !senha) {

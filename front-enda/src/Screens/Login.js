@@ -11,23 +11,27 @@ export default function Login() {
   const [login, setLogin] = useState('');
   const [senha, setSenha] = useState('');
 
+  // let endereco = ""
+
   const verificarLogin = async () => {
     try {
-      const response = await fetch('http://192.168.56.1:3000/login', {
+      console.log("clicou")
+      const response = await fetch('http://10.111.9.16:3000/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email: login, senha }),
+        body: JSON.stringify({ email:login, senha:senha }),
       });
 
       const data = await response.json();
       if (!response.ok) {
         throw new Error(data.msg || 'Credenciais inválidas');
       }
+      
 
       if (data.email) {
-        navigation.navigate('Menu', { user: data.email });
+        navigation.navigate('Menu', { user: data.nome });
       } else {
         throw new Error('Resposta do servidor inválida');
       }
@@ -75,7 +79,7 @@ export default function Login() {
           <Button 
             texto={"Login"} 
             texcolor={"white"} 
-            onPress={verificarLogin} 
+            acao={verificarLogin} 
           />
           <Texto
             acao={irParaCadastro}

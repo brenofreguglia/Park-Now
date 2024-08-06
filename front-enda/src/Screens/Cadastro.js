@@ -1,9 +1,10 @@
-import React from "react";
+import React, {useState} from "react";
 import { StyleSheet, View, Image, FlatList, Dimensions } from "react-native";
 import { Button } from "../Componentes/Buttons";
 import { Texto, TextoInput } from "../Componentes/Textos";
 import Login from "./Login";
 import { useNavigation } from "@react-navigation/native";
+
 
 const {width, height} = Dimensions.get("window")
 
@@ -11,21 +12,71 @@ export default function Cadastro({}) {
 
   const navigation = useNavigation();
 
+  const [form, setForm] = useState({
+    nome: '',
+    sobrenome: '',
+    email: '',
+    senha: '',
+    telefone: '',
+    cpf: '',
+    endereco: '',
+    cep: ''
+  });
+
+  const handleInputChange = (key, value) => {
+    setForm({ ...form, [key]: value });
+  };
+
+  const handleCadastro = async () => {
+    try {
+      const response = await fetch('http://10.111.9.16:3000/cadastro', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(form),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Erro ao realizar cadastro');
+      }
+
+      alert(data.msg);
+      navigation.navigate('Login');
+    } catch (error) {
+      console.error('Erro ao realizar cadastro:', error.message);
+    }
+  };
+
+  const campos = [
+    { key: 'nome', placeholder: `Nome`, value: form.nome },
+    { key: 'sobrenome', placeholder: `Sobrenome`, value: form.sobrenome },
+    { key: 'email', placeholder: 'E-mail', value: form.email },
+    { key: 'senha', placeholder: 'Senha', value: form.senha },
+    { key: 'telefone', placeholder: 'Telefone', value: form.telefone },
+    { key: 'cpf', placeholder: 'CPF', value: form.cpf },
+    { key: 'endereco', placeholder: 'Endereço', value: form.endereco },
+    { key: 'cep', placeholder: 'CEP', value: form.cep }
+  ];
+
+
   const Login = () => {
     navigation.navigate("Login" ,{screen: "Login"});
   };
 
 
-  const campos = [
-    { key: 'nome', placeholder: `  Nome \n  _______________________________`, value: '' },
-    { key: 'sobrenome', placeholder:  `  Sobrenome \n  _______________________________`, value: '' },
-    { key: 'email', placeholder: 'E-mail \n  _______________________________', value: '' },
-    { key: 'senha', placeholder: 'Senha \n  _______________________________', value: '' },
-    { key: 'telefone', placeholder: 'Telefone \n  _______________________________', value: '' },
-    { key: 'cpf', placeholder: 'CPF \n  _______________________________', value: '' },
-    { key: 'endereco', placeholder: 'Endereço \n  _______________________________', value: '' },
-    { key: 'cep', placeholder: 'CEP \n  _______________________________', value: '' }
-  ];
+  // const campos = [
+  //   { key: 'nome', placeholder: `  Nome \n  _______________________________`, value: '' },
+  //   { key: 'sobrenome', placeholder:  `  Sobrenome \n  _______________________________`, value: '' },
+  //   { key: 'email', placeholder: 'E-mail \n  _______________________________', value: '' },
+  //   { key: 'senha', placeholder: 'Senha \n  _______________________________', value: '' },
+  //   { key: 'telefone', placeholder: 'Telefone \n  _______________________________', value: '' },
+  //   { key: 'cpf', placeholder: 'CPF \n  _______________________________', value: '' },
+  //   { key: 'endereco', placeholder: 'Endereço \n  _______________________________', value: '' },
+  //   { key: 'cep', placeholder: 'CEP \n  _______________________________', value: '' }
+  // ];
 
   return (
     <View style={styles.container}>
