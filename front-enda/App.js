@@ -6,12 +6,12 @@ import { ButtonTitle } from './src/Componentes/Buttons';
 import 'react-native-gesture-handler';
 
 
-import Menu from "./src/Screens/Menu";
 import FaleConosco from "./src/Screens/FaleConosco";
-import Login from "./src/Screens/Login";
 import Cadastro from "./src/Screens/Cadastro";
 import Estacionamento from './src/Screens/Estacionamento';
 import Perfil from './src/Screens/Perfil';
+import Login from './src/Screens/Login';
+import Menu from './src/Screens/Menu';
 
 function LogoTitle() {
 
