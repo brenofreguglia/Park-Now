@@ -39,14 +39,18 @@ app.get("api/parknow/consulta", async (req, res) => {
 //  ROTA PRA CADASTRAR O CLIENTE
 app.post("/api/parknow/cadastro", async (req, res) => {
     try {
-        const { nome, sobrenome, usuario, cpf, endereco, cep, telefone, email, senha } = req.body
-        const conexao = await pool.getConnection()
-        let sql = `INSERT INTO cadastro (nome, sobrenome, username, cpf, endereco, cep, telefone,
-        email, senha) VALUE ("${nome}", "${sobrenome}","${usuario}","${cpf}","${endereco}","${cep}","${telefone}",
+        const { nome, sobrenome, cpf, endereco, cep, telefone, email, senha } = req.body
+        if (!nome || !sobrenome || !cpf || !endereco || !cep || !telefone || !email || !senha) {
+            return res.status(400).json({ error: "Todos os campos são obrigatórios" });
+        }
+        let conexao = await pool.getConnection()
+        const sql = `INSERT INTO cadastro (nome, sobrenome, cpf, endereco, cep, telefone,
+        email, senha) VALUES ("${nome}","${sobrenome}","${cpf}","${endereco}","${cep}","${telefone}",
         "${email}","${senha}")`
         console.log(sql)
         const [linhas] = await conexao.execute(sql)
         conexao.release()
+        
         res.json({ msg: "Registro gravado!" })
 
     } catch (error) {
@@ -67,15 +71,23 @@ app.post("/api/parknow/login", async (req, res) => {
         conexao.release()
         res.json({ msg: "Registro gravado!" })
 
+        if (linhas.length === 1) {
+            res.json({msg: "Login realizado com sucesso", login: `${linha[0].login}`});
+          } else {
+            res.json({msg: "Login ou Senha incorreta"});
+          }
+
     } catch (error) {
         console.log(`O Erro que ocorreu foi :${error}`)
         res.status(500).json({ error: "Deu algum erro no cadastro" })
     }
+
+    
 });
 
 
 // ROTA PRA CADASTRAR O LOCAL 
-app.post("/api/parknow/cadastro", async (req, res) => {
+app.post("/api/parknow/local", async (req, res) => {
 
     try {
         const { id_lugar, nome, cidade, endereco, cep, vagas, func_horarios } = req.body
@@ -90,7 +102,6 @@ app.post("/api/parknow/cadastro", async (req, res) => {
         console.log(`O Erro que ocorreu foi :${error}`)
         res.status(500).json({ error: "Deu algum erro no cadastro" })
     }
-
 });
 
 

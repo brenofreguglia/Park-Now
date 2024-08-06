@@ -19,7 +19,6 @@ export default function Cadastro({}) {
   const campos = [
     { key: 'nome', placeholder: `  Nome \n  _______________________________`, value: '' },
     { key: 'sobrenome', placeholder:  `  Sobrenome \n  _______________________________`, value: '' },
-    { key: 'usuario', placeholder: ` Nome do Usuário \n  _______________________________`, value: '' },
     { key: 'email', placeholder: 'E-mail \n  _______________________________', value: '' },
     { key: 'senha', placeholder: 'Senha \n  _______________________________', value: '' },
     { key: 'telefone', placeholder: 'Telefone \n  _______________________________', value: '' },
