@@ -38,18 +38,22 @@ app.get('api/parknow/consulta', async (req, res) => {
 
 // Rota para gerar e retornar o hash SHA-256 de uma string
 app.get('/hash', (req, res) => {
-    // Recebendo a string a ser criptografada
     const { string } = req.query;
-  
-    // Validação da string
+
     if (!string) {
-      return res.status(400).json({ msg: 'Informe uma string para gerar o hash' });
+        return res.status(400).json({ msg: 'Informe uma string para gerar o hash' });
     }
-  
+
     const hash = crypto.createHash('SHA256').update(string).digest('hex');
     res.json({ msg: hash });
-  });
+});
 
+// Função de validação de senha
+const validatePassword = (password) => {
+    // Verifica se a senha tem no mínimo 8 caracteres e contém pelo menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    return passwordRegex.test(password);
+};
 
 // Rota para cadastrar o cliente
 app.post('/cadastro', async (req, res) => {
@@ -59,6 +63,11 @@ app.post('/cadastro', async (req, res) => {
         // Validação dos dados recebidos
         if (!nome || !sobrenome || !cpf || !endereco || !cep || !telefone || !email || !senha) {
             return res.status(400).json({ error: 'Todos os campos são obrigatórios' });
+        }
+
+        // Validação da senha
+        if (!validatePassword(senha)) {
+            return res.status(400).json({ error: 'A senha deve ter pelo menos 8 caracteres, incluindo uma letra maiúscula, uma letra minúscula, um número e um caractere especial.' });
         }
 
         // Criptografa a senha

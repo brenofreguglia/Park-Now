@@ -29,6 +29,7 @@ export default function Cadastro({}) {
 
   const handleCadastro = async () => {
     try {
+      console.log("clicou")
       const response = await fetch('http://10.111.9.16:3000/cadastro', {
         method: 'POST',
         headers: {
@@ -99,6 +100,8 @@ export default function Cadastro({}) {
             lugar={"left"} 
             margin={10}
             cor={"white"}
+            value={form}
+            descricao={(text) => handleInputChange(item.key, text)}
           />
         )}
         keyExtractor={(item) => item.key}
@@ -112,6 +115,7 @@ export default function Cadastro({}) {
               tamanho={330} 
               borda={30}
               height={50} 
+              acao={handleCadastro}
             />
 
             <View style={styles.container_2}>

@@ -21,7 +21,7 @@ const Texto = ({ msg, tamanho, cor, margin, acao }) => {
   );
 };
 
-const TextoInput = ({ holder, tamanho, color, width, borda, height, lugar, margin, cor}) => {
+const TextoInput = ({ holder, tamanho, color, width, borda, height, lugar, margin, cor, descricao, value}) => {
   return (
     <TextInput
       placeholder={holder}
@@ -38,6 +38,8 @@ const TextoInput = ({ holder, tamanho, color, width, borda, height, lugar, margi
           margin: margin,
         },
       ]}
+      onChangeText={descricao}
+      value={value}
     />
   );
 };

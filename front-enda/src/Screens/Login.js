@@ -62,7 +62,8 @@ export default function Login() {
             tamanho={20}
             holder={"E-mail"}
             value={login}
-            onChangeText={setLogin}
+            descricao={setLogin}
+
           />
           <TextoInput
             color={"#D2F0EE"}
@@ -73,8 +74,9 @@ export default function Login() {
             tamanho={20}
             holder={"Senha"}
             secureTextEntry
-            value={senha}
-            onChangeText={setSenha}
+            value = {senha}
+            descricao={setSenha}
+
           />
           <Button 
             texto={"Login"} 
