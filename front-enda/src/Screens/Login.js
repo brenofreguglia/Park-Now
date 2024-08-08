@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Image, ScrollView, Dimensions, TouchableOpacity, Text} from 'react-native';
+import { StyleSheet, View, Image, ScrollView, Dimensions, TouchableOpacity } from 'react-native';
 import { Button } from '../Componentes/Buttons';
-import { Texto, TextoInput } from '../Componentes/Textos';
+import {TextoInput, Texto} from '../Componentes/Textos'; // Importa o componente atualizado
 import { useNavigation } from '@react-navigation/native';
 
 const al = Dimensions.get('screen').height;
@@ -11,24 +11,21 @@ export default function Login() {
   const [login, setLogin] = useState('');
   const [senha, setSenha] = useState('');
 
-  // let endereco = ""
-
   const verificarLogin = async () => {
     try {
-      console.log("clicou")
+      console.log("clicou");
       const response = await fetch('http://10.111.9.16:3000/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email:login, senha:senha }),
+        body: JSON.stringify({ email: login, senha: senha }),
       });
 
       const data = await response.json();
       if (!response.ok) {
         throw new Error(data.msg || 'Credenciais inválidas');
       }
-      
 
       if (data.email) {
         navigation.navigate('Menu', { user: data.nome });
@@ -63,7 +60,7 @@ export default function Login() {
             holder={"E-mail"}
             value={login}
             descricao={setLogin}
-
+            secureTextEntry={false} // Campo de e-mail não requer ocultar
           />
           <TextoInput
             color={"#D2F0EE"}
@@ -73,15 +70,14 @@ export default function Login() {
             lugar={"center"}
             tamanho={20}
             holder={"Senha"}
-            secureTextEntry
-            value = {senha}
+            secureTextEntry={true} // Campo de senha deve ocultar
+            value={senha}
             descricao={setSenha}
-
           />
-          <Button 
-            texto={"Login"} 
-            texcolor={"white"} 
-            acao={verificarLogin} 
+          <Button
+            texto={"Login"}
+            texcolor={"white"}
+            acao={verificarLogin}
           />
           <Texto
             acao={irParaCadastro}
@@ -90,10 +86,6 @@ export default function Login() {
             margin={20}
             cor={"#D9D9D9"}
           />
-
-{/* <TouchableOpacity onPress={verificarLogin} style={styles.botao}>
-        <Text style={{fontSize:30, fontWeight:'bold', color:'#042d65'}}>Logar</Text>
-      </TouchableOpacity> */}
         </View>
       </View>
     </ScrollView>
