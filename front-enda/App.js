@@ -12,6 +12,7 @@ import Estacionamento from './src/Screens/Estacionamento';
 import Perfil from './src/Screens/Perfil';
 import Login from './src/Screens/Login';
 import Menu from './src/Screens/Menu';
+import EditarPerfil from './src/Screens/EditarPerfil';
 
 function LogoTitle() {
 
@@ -57,6 +58,7 @@ export default function App() {
 
         <Drawer.Screen name="Cadastro" component={Cadastro} options={{ headerShown: false }} />
         <Drawer.Screen name="FaleConosco" component={FaleConosco} />
+        <Drawer.Screen name="EditarPerfil" component={EditarPerfil} />
       </Drawer.Navigator>
     </NavigationContainer>
   );
