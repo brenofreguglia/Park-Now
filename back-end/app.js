@@ -128,7 +128,6 @@ app.post('/cadastro', async (req, res) => {
     }
 });
 
-
 app.post('/login', async (req, res) => {
     try {
       const { email, senha } = req.body;
@@ -160,10 +159,31 @@ app.post('/login', async (req, res) => {
     }
   });
 
+// Rota para atualizar perfil
+app.put('/atualizar', async (req, res) => {
+  const { id, nome, telefone, email, senha } = req.body;
 
+  if (!id || !nome || !telefone || !email || !senha) {
+    return res.status(400).json({ error: 'Todos os campos são obrigatórios' });
+  }
+
+  try {
+    const hash = crypto.createHash('SHA256').update(senha).digest('hex');
+    const [result] = await pool.execute('UPDATE cadastro SET nome = ?, telefone = ?, email = ?, senha = ? WHERE id = ?', [nome, telefone, email, hash, id]);
+
+    if (result.affectedRows > 0) {
+      res.json({ success: true });
+    } else {
+      res.status(400).json({ error: 'Erro ao atualizar o perfil' });
+    }
+  } catch (error) {
+    console.error('Erro ao atualizar perfil:', error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+});
 
 // ROTA PRA CADASTRAR O LOCAL 
-app.post('/api/parknow/local', async (req, res) => {
+/*app.post('/api/parknow/local', async (req, res) => {
 
     try {
         const { id_lugar, nome, cidade, endereco, cep, vagas, func_horarios } = req.body
@@ -178,11 +198,11 @@ app.post('/api/parknow/local', async (req, res) => {
         console.log(`O Erro que ocorreu foi :${error}`)
         res.status(500).json({ error: 'Deu algum erro no cadastro' })
     }
-});
+}); */
 
 
 // ROTA DO CLIENTE
-app.get('/api/parknow/cliente', async (req, res) => {
+/*app.get('/api/parknow/cliente', async (req, res) => {
 
     try {
         const { id_cliente, nome, tipo_veiculo, endereco, cep, placa_automovel, } = req.body
@@ -197,10 +217,10 @@ app.get('/api/parknow/cliente', async (req, res) => {
         res.status(500).json({ error: 'Deu algum erro no cadastro' })
     }
 
-});
+}); */
 
 // ROTA PRA DELETAR CONTA DO CLIENTE
-app.delete('/api/parknow/cadastro/:id', async (req, res) => {
+/*app.delete('/api/parknow/cadastro/:id', async (req, res) => {
     try {
         const id_passado = req.params.id
         const conexao = await pool.getConnection()
@@ -214,10 +234,10 @@ app.delete('/api/parknow/cadastro/:id', async (req, res) => {
         console.log(`O Erro que ocorreu foi :${error}`)
         res.status(500).json({ error: 'Deu algum erro na exclusão' })
     }
-})
+}) */
 
 // ROTA PRA EDITAR CONTA DO CLIENTE
-app.put('/api/parknow/cadastro/', async (req, res) => {
+/*app.put('/api/parknow/cadastro/', async (req, res) => {
     try {
         const { id, nome, email,sobrenome,username,cpf,endereco,cep,telefone,senha } = req.body
         const conexao = await pool.getConnection()
@@ -232,6 +252,6 @@ app.put('/api/parknow/cadastro/', async (req, res) => {
         console.log(`O Erro que ocorreu foi :${error}`)
         res.status(500).json({ error: 'Deu algum erro na edição' })
     }
-})
+}) */
 
 app.listen(porta, () => console.log(`ver rodando em porta ${porta}`))

@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, TextInput, View, Image, TouchableOpacity, Dimensions } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, TextInput, View, Image, TouchableOpacity, Dimensions, Alert } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const screenHeight = Dimensions.get('screen').height;
 
@@ -13,8 +14,36 @@ export default function EditarPerfil() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [profileImage, setProfileImage] = useState(null);
+  const [userId, setUserId] = useState(null);
 
   const navigation = useNavigation();
+  const route = useRoute();
+
+  useEffect(() => {
+    // Carregar o userId e outros dados iniciais se estiverem disponíveis
+    const fetchUserData = async () => {
+      try {
+        const id = await AsyncStorage.getItem('userId');
+        if (id) {
+          setUserId(id);
+
+          // Opcional: Carregar os dados do perfil para edição, se necessário
+          // const response = await fetch(`https://10.111.9.16:3000/usuario/${id}`);
+          // const userData = await response.json();
+          // setName(userData.nome);
+          // setPhone(userData.telefone);
+          // setEmail(userData.email);
+        } else {
+          Alert.alert('Erro', 'ID do usuário não encontrado');
+        }
+      } catch (error) {
+        console.error('Erro ao carregar dados do usuário:', error);
+        Alert.alert('Erro', 'Não foi possível carregar os dados do usuário');
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -29,8 +58,44 @@ export default function EditarPerfil() {
     }
   };
 
-  const handleSave = () => {
-    // Lógica para salvar os dados no banco de dados
+  const handleSave = async () => {
+    if (!name || !phone || !email || !password || !confirmPassword) {
+      Alert.alert('Erro', 'Todos os campos são obrigatórios');
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      Alert.alert('Erro', 'As senhas não coincidem');
+      return;
+    }
+
+    try {
+      const response = await fetch('https://10.111.9.16:3000/atualizar', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          id: userId,
+          nome: name,
+          telefone: phone,
+          email: email,
+          senha: password,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const result = await response.json();
+      console.log('Success:', result);
+      Alert.alert('Sucesso', 'Perfil atualizado com sucesso');
+      navigation.goBack();
+    } catch (error) {
+      console.error('Erro ao salvar os dados:', error);
+      Alert.alert('Erro', 'Erro ao salvar os dados');
+    }
   };
 
   return (
@@ -108,36 +173,33 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     position: 'absolute',
     top: 0,
-    paddingTop: 100, // Adicionando mais espaço no topo
+    paddingTop: 100,
   },
   image: {
     height: 100,
     width: 100,
     borderRadius: 50,
     backgroundColor: '#D2F0EE',
-    borderWidth: 4, // Adicionando uma borda ao redor da imagem para destacá-la
-    borderColor: '#ffffff', // Cor da borda branca para destacar a imagem
-    marginBottom: -50, // Fazendo a imagem sobrepor o card
+    borderWidth: 4,
+    borderColor: '#ffffff',
+    marginBottom: -50,
   },
   card: {
     backgroundColor: '#D2F0EE',
     width: '100%',
     height: screenHeight - 300,
     position: 'absolute',
-    top: 250, // Ajuste de posição para que o card comece um pouco abaixo da imagem
+    top: 250,
     borderTopLeftRadius: 45,
     borderTopRightRadius: 45,
     shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-    paddingTop: 60, // Adicionando espaço no topo para os inputs
-    paddingHorizontal: 20, // Adicionando mais padding horizontal
-    alignItems: 'center', // Centralizando os inputs
+    paddingTop: 60,
+    paddingHorizontal: 20,
+    alignItems: 'center',
   },
   input: {
     backgroundColor: '#ffffff',

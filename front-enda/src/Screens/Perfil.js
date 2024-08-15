@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, Image, ScrollView, Dimensions, TouchableOpacity, Alert } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const screenHeight = Dimensions.get('screen').height;
 
@@ -10,6 +11,19 @@ export default function Perfil({ handleLogout }) {
 
   const handleBackNavigation = () => {
     navigation.goBack();
+  };
+
+  const handleEditPress = async () => {
+    try {
+      const id = await AsyncStorage.getItem('userId');
+      if (id) {
+        navigation.navigate('EditarPerfil', { userId: id });
+      } else {
+        Alert.alert('Erro', 'Não foi possível obter o ID do usuário');
+      }
+    } catch (error) {
+      console.error('Erro ao obter o userId do AsyncStorage:', error);
+    }
   };
 
   const handleLogoutPress = () => {
@@ -22,8 +36,8 @@ export default function Perfil({ handleLogout }) {
           text: 'Sair',
           onPress: async () => {
             try {
-              await handleLogout(); // Chama a função handleLogout passada como prop
-              navigation.navigate('Login'); // Navega para a tela de Login após o logout
+              await handleLogout();
+              navigation.navigate('Login');
             } catch (error) {
               console.error('Erro ao fazer logout:', error);
             }
@@ -41,12 +55,12 @@ export default function Perfil({ handleLogout }) {
           <MaterialIcons name="arrow-back" size={24} color="black" />
         </TouchableOpacity>
         <Image
-          source={{ uri: 'https://via.placeholder.com/150' }} // Substitua pela URL da imagem de perfil
+          source={{ uri: 'https://via.placeholder.com/150' }}
           style={styles.image}
         />
         <View style={styles.profileDetails}>
           <Text style={styles.profileName}>Nome S.</Text>
-          <TouchableOpacity style={styles.editButton}>
+          <TouchableOpacity style={styles.editButton} onPress={handleEditPress}>
             <Text style={styles.editButtonText}>Editar</Text>
           </TouchableOpacity>
         </View>
