@@ -55,14 +55,49 @@ const validatePassword = (password) => {
     return passwordRegex.test(password);
 };
 
+// Função de validação de campos
+const validateFields = (data) => {
+    const { nome, sobrenome, cpf, endereco, cep, telefone, email } = data;
+
+    const nameRegex = /^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$/;
+    const cpfRegex = /^\d{11}$/;
+    const cepRegex = /^\d{8}$/;
+    const phoneRegex = /^\d{10,11}$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!nameRegex.test(nome) || !nameRegex.test(sobrenome)) {
+        return 'Nome ou Sobrenome inválido. Não deve conter números ou caracteres especiais.';
+    }
+    if (!cpfRegex.test(cpf)) {
+        return 'CPF inválido. Deve conter apenas 11 dígitos numéricos.';
+    }
+    if (!cepRegex.test(cep)) {
+        return 'CEP inválido. Deve conter 8 dígitos numéricos.';
+    }
+    if (!phoneRegex.test(telefone)) {
+        return 'Telefone inválido. Deve conter 10 ou 11 dígitos numéricos.';
+    }
+    if (!emailRegex.test(email)) {
+        return 'Email inválido. Deve ser um email válido com domínio.';
+    }
+
+    return null;
+};
+
 // Rota para cadastrar o cliente
 app.post('/cadastro', async (req, res) => {
     try {
         const { nome, sobrenome, cpf, endereco, cep, telefone, email, senha } = req.body;
 
-        // Validação dos dados recebidos
+        // Verificação de campos vazios
         if (!nome || !sobrenome || !cpf || !endereco || !cep || !telefone || !email || !senha) {
             return res.status(400).json({ error: 'Todos os campos são obrigatórios' });
+        }
+
+        // Validação dos dados
+        const validationError = validateFields({ nome, sobrenome, cpf, endereco, cep, telefone, email });
+        if (validationError) {
+            return res.status(400).json({ error: validationError });
         }
 
         // Validação da senha
@@ -78,18 +113,18 @@ app.post('/cadastro', async (req, res) => {
 
         // Prepara e executa a consulta SQL com parâmetros
         const sql = `INSERT INTO cadastro (nome, sobrenome, cpf, endereco, cep, telefone, email, senha) 
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+                     VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
         const [result] = await conect.execute(sql, [nome, sobrenome, cpf, endereco, cep, telefone, email, hash]);
 
         // Libera a conexão
         conect.release();
 
         // Retorna uma resposta de sucesso
-        res.json({ msg: 'Registro gravado!' });
+        res.json({ msg: 'Registro gravado com sucesso!' });
 
     } catch (error) {
-        console.log(`O Erro que ocorreu foi: ${error}`);
-        res.status(500).json({ error: 'Deu algum erro no cadastro' });
+        console.error(`Ocorreu um erro: ${error}`);
+        res.status(500).json({ error: 'Erro ao realizar o cadastro. Por favor, tente novamente mais tarde.' });
     }
 });
 

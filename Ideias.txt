@@ -1,88 +1,30 @@
-login:
+app.post('/login', async (req, res) => {
+    try {
+        const { email, senha } = req.body;
 
-import React, { useState } from "react";
-import { StyleSheet, View, Image, ScrollView } from "react-native";
-import { Button } from "../Componentes/Buttons";
-import { Texto, TextoInput } from "../Componentes/Textos";
-import { useNavigation } from "@react-navigation/native";
+        if (!email || !senha) {
+            return res.status(400).json({ msg: "Email e Senha são obrigatórios" });
+        }
 
-export default function Login() {
-  const navigation = useNavigation();
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+        const hash = crypto.createHash('SHA256').update(senha).digest('hex');
+        const sql = "SELECT email, tipo_usuario FROM cadastro WHERE email = ? AND senha = ?";
+        
+        const connection = await pool.getConnection();
+        const [rows] = await connection.execute(sql, [email, hash]);
+        connection.release();
 
-  const cadastrarSe = () => {
-    navigation.navigate('Cadastrar_se');
-  }
-
-  const handleLogin = () => {
-    // Lógica de autenticação
-    if (username === "usuario" && password === "senha") {
-        // Credenciais corretas, navegue para a próxima tela ou realize outra ação
-        Alert.alert("Sucesso", "Login realizado com sucesso!");
-      } else {
-        // Credenciais incorretas, exiba uma mensagem de erro
-        Alert.alert("Erro", "Nome de usuário ou senha incorretos. Por favor, tente novamente.");
-      }
-  }
-
-  return (
-    <ScrollView>
-      <View style={styles.container}>
-        <Image source={require("../../assets/Imgs/imagem.png")} style={styles.image}/>
-        <View style={styles.container_2}>
-          <TextoInput
-            style={styles.input}
-            placeholder="Nome de usuário"
-            value={username}
-            onChangeText={setUsername}
-          />
-          <TextoInput
-            style={styles.input}
-            placeholder="Senha"
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-          />
-          <Button texto="Login" onPress={handleLogin}/>
-          <Texto
-            msg="Ainda não tem uma conta ?"
-            onPress={cadastrarSe}
-            style={styles.registerLink}
-          />
-        </View>
-      </View>
-    </ScrollView>
-  ) 
-}
-  
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: "#D2F0EE",
-  },
-  container_2: {
-    flex: 1,
-    backgroundColor: "#73D2C0",
-    marginTop: "10%",
-    width: "100%",
-    justifyContent: 'space-evenly',
-    alignItems: "center",
-  },
-  image: {
-    height: 250,
-    marginVertical: 30
-  },
-  input: {
-    color: "#D2F0EE",
-    width: 330,
-    borderRadius: 30,
-  },
-  registerLink: {
-    color: "red"
-  }
+        if (rows.length === 1) {
+            const tipoUsuario = rows[0].tipo_usuario;
+            if (tipoUsuario === 'admin' || tipoUsuario === 'gerente') {
+                res.json({ msg: "Login realizado com sucesso", email: rows[0].email });
+            } else {
+                res.status(403).json({ msg: "Acesso negado. Você não tem permissão para acessar esta área." });
+            }
+        } else {
+            res.status(401).json({ msg: "Email ou Senha incorreta" });
+        }
+    } catch (error) {
+        console.error("Erro ao autenticar usuário:", error);
+        res.status(500).json({ error: "Erro interno ao processar login" });
+    }
 });
-

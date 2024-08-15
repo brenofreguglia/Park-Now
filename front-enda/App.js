@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import { createDrawerNavigator } from "@react-navigation/drawer";
-import { ActivityIndicator, Text, StyleSheet, View } from "react-native";
+import { Text, StyleSheet, View } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { ButtonTitle } from './src/Componentes/Buttons';
 import 'react-native-gesture-handler';
+
 
 import FaleConosco from "./src/Screens/FaleConosco";
 import Cadastro from "./src/Screens/Cadastro";
@@ -12,20 +14,19 @@ import Perfil from './src/Screens/Perfil';
 import Login from './src/Screens/Login';
 import Menu from './src/Screens/Menu';
 import EditarPerfil from './src/Screens/EditarPerfil';
-import { ButtonTitle } from './src/Componentes/Buttons';
 
 function LogoTitle() {
   const navigation = useNavigation();
 
-  const Perfil = () => {
+  const navigateToPerfil = () => {
     navigation.navigate("Perfil");
   };
 
   return (
     <View style={styles.header}>
-      <View style={{ flexDirection: 'row', alignItems: 'center'}}>
-        <Text style={{ color: "black", marginRight: 40, textAlign: "center", left: 100, fontSize: 20, fontWeight: "bold"}}>HOME</Text>
-        <ButtonTitle acao={Perfil} />
+      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <Text style={{ color: "black", marginRight: 40, textAlign: "center", left: 100, fontSize: 20, fontWeight: "bold" }}>HOME</Text>
+        <ButtonTitle acao={navigateToPerfil} />
       </View>
     </View>
   );
@@ -34,56 +35,61 @@ function LogoTitle() {
 const Drawer = createDrawerNavigator();
 
 export default function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(null); // Estado para armazenar o status de login
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    const checkLoginStatus = async () => {
-      const loggedIn = await AsyncStorage.getItem('isLoggedIn');
-      setIsLoggedIn(loggedIn === 'true');
+    const checkUser = async () => {
+      const savedUser = await AsyncStorage.getItem('user');
+      if (savedUser) {
+        setIsLoggedIn(true);
+      }
     };
 
-    checkLoginStatus();
+    checkUser();
   }, []);
 
-  if (isLoggedIn === null) {
-    // Exibir um indicador de carregamento enquanto o status de login é verificado
-    return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#0000ff" />
-      </View>
-    );
-  }
+  const handleLogout = async () => {
+    try {
+      await AsyncStorage.removeItem('user');
+      setIsLoggedIn(false);
+    } catch (error) {
+      console.error('Erro ao fazer logout:', error);
+    }
+  };
 
   return (
     <NavigationContainer>
       <Drawer.Navigator screenOptions={{ headerShown: false }}>
-        {isLoggedIn ? (
-          // Se estiver logado, redireciona para o Menu
-          <Drawer.Screen name="Menu" component={Menu} options={{
+        <Drawer.Screen
+          name="Menu"
+          component={Menu}
+          options={{
             headerStyle: { backgroundColor: "#D2F0EE" },
             headerTitle: (props) => <LogoTitle {...props} />,
             headerShown: true
-          }} />
-        ) : (
-          // Se não estiver logado, redireciona para o Login
-          <Drawer.Screen name="Login" component={Login} options={{ 
-            headerShown: false 
-          }} />
-        )}
-        
-        <Drawer.Screen name="Perfil" component={Perfil} options={{
-          drawerItemStyle: { display: 'none' }
-        }} />
-
-        <Drawer.Screen name="Estacionamento" component={Estacionamento} options={{
-          // drawerItemStyle: { display: 'none' }
-        }} />  
-
-        <Drawer.Screen name="Cadastro" component={Cadastro} options={{ headerShown: false, drawerItemStyle: { display: 'none' } }} />
+          }}
+        />
+        <Drawer.Screen
+          name="Perfil"
+          options={{
+            drawerItemStyle: { display: 'none' }
+          }}
+        >
+          {(props) => <Perfil {...props} handleLogout={handleLogout} />}
+        </Drawer.Screen>
+        <Drawer.Screen name='Estacionamento' component={Estacionamento} />
+        <Drawer.Screen
+          name="Login"
+          component={Login}
+          options={{ headerShown: false }}
+        />
+        <Drawer.Screen
+          name="Cadastro"
+          component={Cadastro}
+          options={{ headerShown: false }}
+        />
         <Drawer.Screen name="FaleConosco" component={FaleConosco} />
-        <Drawer.Screen name="EditarPerfil" component={EditarPerfil} options={{
-          drawerItemStyle: { display: 'none' }
-        }}/>
+        <Drawer.Screen name="EditarPerfil" component={EditarPerfil} />
       </Drawer.Navigator>
     </NavigationContainer>
   );
@@ -94,16 +100,4 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  // title: {
-  //   color: "black",
-  //   fontSize: 20,
-  //   fontWeight: "bold",
-  //   textAlign: "center",
-  //   paddingHorizontal: 30,
-  // },
-  // loadingContainer: {
-  //   flex: 1,
-  //   justifyContent: 'center',
-  //   alignItems: 'center',
-  // },
 });

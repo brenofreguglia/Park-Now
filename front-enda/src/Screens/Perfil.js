@@ -1,74 +1,37 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, ScrollView, Dimensions, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Image, ScrollView, Dimensions, TouchableOpacity, Alert } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
 const screenHeight = Dimensions.get('screen').height;
 
-export default function Perfil() {
+export default function Perfil({ handleLogout }) {
   const navigation = useNavigation();
-
-  const rentals = [
-    {
-      id: 1,
-      location: 'Max Atacadista Jardim Eldorado',
-      date: '26/07/24',
-      time: '14:20 às 16:40',
-      spot: '05',
-    },
-    {
-      id: 2,
-      location: 'PrudenShopping',
-      date: '14/07/24',
-      time: '19:40 às 22:10',
-      spot: '06',
-    },
-    {
-      id: 3,
-      location: 'Parque Shopping Prudente',
-      date: '22/06/24',
-      time: '18:10 às 22:40',
-      spot: '07',
-    },
-    {
-      id: 4,
-      location: 'Shopping Center Norte',
-      date: '02/08/24',
-      time: '10:00 às 12:00',
-      spot: '12',
-    },
-    {
-      id: 5,
-      location: 'Iguatemi São Paulo',
-      date: '05/08/24',
-      time: '14:00 às 16:00',
-      spot: '15',
-    },
-    {
-      id: 6,
-      location: 'Shopping Morumbi',
-      date: '08/08/24',
-      time: '17:00 às 19:00',
-      spot: '08',
-    },
-    {
-      id: 7,
-      location: 'Shopping Eldorado',
-      date: '10/08/24',
-      time: '11:30 às 13:30',
-      spot: '10',
-    },
-    {
-      id: 8,
-      location: 'Shopping Ibirapuera',
-      date: '12/08/24',
-      time: '09:00 às 11:00',
-      spot: '03',
-    },
-  ];
 
   const handleBackNavigation = () => {
     navigation.goBack();
+  };
+
+  const handleLogoutPress = () => {
+    Alert.alert(
+      'Confirmar Logout',
+      'Tem certeza que deseja sair?',
+      [
+        { text: 'Cancelar', style: 'cancel' },
+        {
+          text: 'Sair',
+          onPress: async () => {
+            try {
+              await handleLogout(); // Chama a função handleLogout passada como prop
+              navigation.navigate('Login'); // Navega para a tela de Login após o logout
+            } catch (error) {
+              console.error('Erro ao fazer logout:', error);
+            }
+          },
+        },
+      ],
+      { cancelable: false }
+    );
   };
 
   return (
@@ -87,28 +50,15 @@ export default function Perfil() {
             <Text style={styles.editButtonText}>Editar</Text>
           </TouchableOpacity>
         </View>
+        <TouchableOpacity style={styles.logoutButton} onPress={handleLogoutPress}>
+          <Text style={styles.logoutButtonText}>Sair</Text>
+        </TouchableOpacity>
       </View>
 
       <View style={styles.card}>
         <Text style={styles.recentRentalsTitle}>Aluguéis Recentes</Text>
         <ScrollView showsVerticalScrollIndicator={false}>
-          {rentals.map(rental => (
-            <View key={rental.id} style={styles.rentalItem}>
-              <Image
-                source={{ uri: 'https://via.placeholder.com/50' }}
-                style={styles.rentalImage}
-              />
-              <View style={styles.rentalDetails}>
-                <Text style={styles.rentalLocation}>{rental.location}</Text>
-                <Text style={styles.rentalInfo}>Data: {rental.date}</Text>
-                <Text style={styles.rentalInfo}>Horário: {rental.time}</Text>
-                <Text style={styles.rentalInfo}>Número da Vaga: {rental.spot}</Text>
-              </View>
-              <TouchableOpacity>
-                <MaterialIcons name="delete" size={24} color="black" />
-              </TouchableOpacity>
-            </View>
-          ))}
+          {/* Adicione a lista de aluguéis aqui */}
         </ScrollView>
       </View>
     </View>
@@ -128,7 +78,7 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     position: 'absolute',
     top: 0,
-    paddingTop: 40, // Adicionando mais espaço no topo
+    paddingTop: 40,
   },
   backButton: {
     position: 'absolute',
@@ -162,6 +112,19 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     fontWeight: 'bold',
   },
+  logoutButton: {
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    backgroundColor: '#d9534f',
+    borderRadius: 20,
+    position: 'absolute',
+    right: 20,
+    top: 40,
+  },
+  logoutButtonText: {
+    color: '#ffffff',
+    fontWeight: 'bold',
+  },
   card: {
     backgroundColor: '#D2F0EE',
     width: '100%',
@@ -171,46 +134,14 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 45,
     borderTopRightRadius: 45,
     shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-    paddingTop: 20,
-    paddingHorizontal: 10,
+    shadowOffset: { width: 0, height: -5 },
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    padding: 20,
   },
   recentRentalsTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#000',
     marginBottom: 10,
-    textAlign: 'center',
-  },
-  rentalItem: {
-    flexDirection: 'row',
-    backgroundColor: '#ffffff',
-    padding: 10,
-    borderRadius: 10,
-    marginBottom: 10,
-    alignItems: 'center',
-  },
-  rentalImage: {
-    width: 50,
-    height: 50,
-    borderRadius: 10,
-    marginRight: 10,
-  },
-  rentalDetails: {
-    flex: 1,
-  },
-  rentalLocation: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#000',
-  },
-  rentalInfo: {
-    color: '#097f6c',
   },
 });
