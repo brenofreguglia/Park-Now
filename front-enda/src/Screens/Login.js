@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Image, ScrollView, Dimensions, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Image, ScrollView, Dimensions } from 'react-native';
 import { Button } from '../Componentes/Buttons';
-import {TextoInput, Texto} from '../Componentes/Textos'; // Importa o componente atualizado
+import { TextoInput, Texto } from '../Componentes/Textos';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { CommonActions } from '@react-navigation/native';
 
 const al = Dimensions.get('screen').height;
 
@@ -11,9 +13,9 @@ export default function Login() {
   const [login, setLogin] = useState('');
   const [senha, setSenha] = useState('');
 
+
   const verificarLogin = async () => {
     try {
-      console.log("clicou");
       const response = await fetch('http://10.111.9.16:3000/login', {
         method: 'POST',
         headers: {
@@ -21,14 +23,26 @@ export default function Login() {
         },
         body: JSON.stringify({ email: login, senha: senha }),
       });
-
+  
       const data = await response.json();
       if (!response.ok) {
         throw new Error(data.msg || 'Credenciais inválidas');
       }
-
+  
       if (data.email) {
-        navigation.navigate('Menu', { user: data.nome });
+        await AsyncStorage.setItem('isLoggedIn', 'true');
+  
+        const userName = data.nome || 'Usuário'; // Usa um valor padrão se data.nome estiver indefinido
+        await AsyncStorage.setItem('userName', userName);
+  
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [
+              { name: 'Menu', params: { user: userName } }
+            ],
+          })
+        );
       } else {
         throw new Error('Resposta do servidor inválida');
       }
@@ -60,7 +74,7 @@ export default function Login() {
             holder={"E-mail"}
             value={login}
             descricao={setLogin}
-            secureTextEntry={false} // Campo de e-mail não requer ocultar
+            secureTextEntry={false}
           />
           <TextoInput
             color={"#D2F0EE"}
@@ -70,7 +84,7 @@ export default function Login() {
             lugar={"center"}
             tamanho={20}
             holder={"Senha"}
-            secureTextEntry={true} // Campo de senha deve ocultar
+            secureTextEntry={true}
             value={senha}
             descricao={setSenha}
           />

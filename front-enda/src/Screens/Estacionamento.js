@@ -1,56 +1,34 @@
-import { StyleSheet, View, Image, ScrollView, Dimensions } from "react-native";
-import { Button } from "../Componentes/Buttons";
-import { Texto, TextoInput } from "../Componentes/Textos";
-import { useNavigation } from "@react-navigation/native";
+import React, { useState } from 'react';
+import { StyleSheet, View, Text, TouchableOpacity, ScrollView } from 'react-native';
 
+export default function Estacionamento() {
+  const [matriz, setMatriz] = useState([
+    [0, 0, 0],
+    [0, 0, 0],
+    [0, 0, 0]
+  ]);
 
-const al = Dimensions.get("screen").height;
-
-export default function Estacionamento({}) {
-  const navigation = useNavigation();
-
-  const Cadastro = () => {
-    navigation.navigate("Cadastro" ,{screen: "Cadastro"});
+  const toggleVaga = (i, j) => {
+    const novaMatriz = [...matriz];
+    novaMatriz[i][j] = matriz[i][j] === 0 ? 1 : 0;
+    setMatriz(novaMatriz);
   };
 
   return (
-    <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-      <View style={styles.container}>
-        <Image
-          source={require("../../assets/Imgs/imagem.png")}
-          style={styles.image}
-        />
-        <View style={styles.container_2}>
-          <TextoInput
-            color={"#D2F0EE"}
-            width={330}
-            borda={30}
-            margin={20}
-            height={60}
-            lugar={"center"}
-            tamanho={20}
-            holder={"E-mail"}
-          />
-          <TextoInput
-            color={"#D2F0EE"}
-            width={330}
-            borda={30}
-            height={60}
-            lugar={"center"}
-            tamanho={20}
-            holder={"Senha"}
-          />
-            <Button 
-            texto={"Login"} 
-            texcolor={"white"} />
-            <Texto
-            acao={Cadastro}
-            msg={"Ainda não possui uma conta? Cadastre-se"}
-            tamanho={15}
-            margin={20}
-            cor={"#D9D9D9"}
-          />
-        </View>
+    <ScrollView contentContainerStyle={styles.container}>
+      <Text style={styles.title}>Estacionamento Interativo</Text>
+      <View style={styles.gridContainer}>
+        {matriz.map((row, i) => (
+          row.map((cell, j) => (
+            <TouchableOpacity
+              key={`${i}-${j}`}
+              style={[styles.gridItem, cell === 1 && styles.occupied]}
+              onPress={() => toggleVaga(i, j)}
+            >
+              <Text style={styles.gridText}>{cell === 0 ? 'Livre' : 'Ocupada'}</Text>
+            </TouchableOpacity>
+          ))
+        ))}
       </View>
     </ScrollView>
   );
@@ -58,20 +36,37 @@ export default function Estacionamento({}) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: "#D2F0EE",
-    alignItems: "center",
-    justifyContent: "center",
+    flexGrow: 1,
+    backgroundColor: 'black',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 20,
   },
-  container_2: {
-    backgroundColor: "#73D2C0",
-    width: "100%",
-    alignItems: "center",
-    paddingVertical: 60,
+  title: {
+    color: 'brown',
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
   },
-  image: {
-    height: 250,
-    margin: 70,
-    resizeMode: "contain",
+  gridContainer: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(3, 1fr)',
+    gap: 10,
+  },
+  gridItem: {
+    width: 80,
+    height: 80,
+    backgroundColor: 'black',
+    borderColor: 'white',
+    borderWidth: 2,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  occupied: {
+    backgroundColor: 'brown',
+  },
+  gridText: {
+    color: 'white',
+    fontWeight: 'bold',
   },
 });
