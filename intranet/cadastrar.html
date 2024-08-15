@@ -4,40 +4,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tela de Login</title>
-    <link rel="stylesheet" href="styles2.css">
+    <title>Tela de Cadastro</title>
+    <link rel="stylesheet" href="styles2.css"> <!-- Usando o mesmo arquivo CSS da tela de login -->
     <link rel="icon" type="image/png" sizes="32x32" href="IMG.png">
 </head>
 
 <body>
-    <div class="login-wrapper">
+    <div class="container">
+        <div class="image-container">
+            <img class="foto1" src="carro23.png" alt="">
+        </div>
         <div class="login-container">
-                <h6>nome</h6>
-                <input id="nome" type="text">
-                <h6>cidade</h6>
-                <input id="cidade" type="text">
-                <h6>endereço</h6>
-                <input id="endereco" type="text">
-                <h6>cep</h6>
-                <input id="cep" type="text">
-                <h6>quantidade de vagas</h6>
-                <input id="qtd_vagas" type="text">
-                <h6>fuso horario</h6>
-                <input id="fuso_hora" type="text">
-                <h6>latitude</h6>
-                <input id="latitude" type="text">
-                <h6>longitude</h6>
-                <input id="longitude" type="text">
-
+            <h2>Cadastro</h2>
+            <form action="/cadastro" method="post">
+                <div class="input-group">
+                    <label for="nome">Nome:</label>
+                    <input type="text" id="nome" name="nome" required>
+                </div>
+                <div class="input-group">
+                    <label for="cidade">Cidade:</label>
+                    <input type="text" id="cidade" name="cidade" required>
+                </div>
+                <div class="input-group">
+                    <label for="endereco">Endereço:</label>
+                    <input type="text" id="endereco" name="endereco" required>
+                </div>
+                <div class="input-group">
+                    <label for="cep">CEP:</label>
+                    <input type="text" id="cep" name="cep" required>
+                </div>
+                <div class="input-group">
+                    <label for="qtd_vagas">Quantidade de Vagas:</label>
+                    <input type="text" id="qtd_vagas" name="qtd_vagas" required>
+                </div>
+                <div class="input-group">
+                    <label for="fuso_hora">Fuso Horário:</label>
+                    <input type="text" id="fuso_hora" name="fuso_hora" required>
+                </div>
+                <div class="input-group">
+                    <label for="latitude">Latitude:</label>
+                    <input type="text" id="latitude" name="latitude" required>
+                </div>
+                <div class="input-group">
+                    <label for="longitude">Longitude:</label>
+                    <input type="text" id="longitude" name="longitude" required>
+                </div>
                 <button type="submit">Cadastrar</button>
-
-                <!-- nome, cidade, endereço, cep, quantidade de vagas , fuso horario, latitude e longitude -->
-           
-           
-                
+                <p><a href="index.html" class="back-link">Voltar para a Página Inicial</a></p>
             </form>
         </div>
     </div>
+    <script src="script.js"></script>
 </body>
 
 </html>
