@@ -9,8 +9,8 @@ const screenHeight = Dimensions.get('screen').height;
 export default function Perfil({ handleLogout }) {
   const navigation = useNavigation();
 
-  const handleBackNavigation = () => {
-    navigation.goBack();
+  const VoltarTela = () => {
+    navigation.navigate("Menu");
   };
 
   const handleEditPress = async () => {
@@ -50,8 +50,9 @@ export default function Perfil({ handleLogout }) {
 
   return (
     <View style={styles.container}>
+
       <View style={styles.profileHeader}>
-        <TouchableOpacity style={styles.backButton} onPress={handleBackNavigation}>
+        <TouchableOpacity style={styles.backButton} onPress={VoltarTela}>
           <MaterialIcons name="arrow-back" size={24} color="black" />
         </TouchableOpacity>
         <Image

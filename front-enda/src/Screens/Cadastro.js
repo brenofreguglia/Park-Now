@@ -5,6 +5,7 @@ import { Texto, TextoInput } from "../Componentes/Textos";
 import { useNavigation } from "@react-navigation/native";
 
 const { width, height } = Dimensions.get("window");
+const rota = "http://10.111.9.8"
 
 export default function Cadastro({}) {
   const navigation = useNavigation();
@@ -49,7 +50,7 @@ export default function Cadastro({}) {
     }
 
     try {
-      const response = await fetch('http://10.111.9.16:3000/cadastro', {
+      const response = await fetch(`${rota}:3000/cadastro`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

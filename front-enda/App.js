@@ -5,7 +5,7 @@ import { Text, StyleSheet, View } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ButtonTitle } from './src/Componentes/Buttons';
 import 'react-native-gesture-handler';
-
+import Toast from 'react-native-toast-message';
 
 import FaleConosco from "./src/Screens/FaleConosco";
 import Cadastro from "./src/Screens/Cadastro";
@@ -62,8 +62,8 @@ export default function App() {
     <NavigationContainer>
       <Drawer.Navigator screenOptions={{ headerShown: false }}>
 
-      <Drawer.Screen name="Spla" component={SplachScreen} />
-      
+        <Drawer.Screen name="SplashScreen" component={SplachScreen} />
+
         <Drawer.Screen
           name="Menu"
           component={Menu}
@@ -72,6 +72,7 @@ export default function App() {
             headerTitle: (props) => <LogoTitle {...props} />,
             headerShown: true
           }}
+          initialParams={{ user: isLoggedIn ? 'Seu Nome' : null }} // Passar o nome do usuário como parâmetro inicial
         />
         <Drawer.Screen
           name="Perfil"
@@ -95,6 +96,9 @@ export default function App() {
         <Drawer.Screen name="FaleConosco" component={FaleConosco} />
         <Drawer.Screen name="EditarPerfil" component={EditarPerfil} />
       </Drawer.Navigator>
+
+      {/* Adicione o Toast aqui para ter acesso global */}
+      <Toast ref={(ref) => Toast.setRef(ref)} />
     </NavigationContainer>
   );
 }

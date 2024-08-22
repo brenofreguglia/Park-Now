@@ -1,19 +1,28 @@
-import { StyleSheet, View, Image, ScrollView, Dimensions, Text } from "react-native";
+import React, { useEffect } from 'react';
+import { StyleSheet, View, Image, ScrollView, Text } from "react-native";
 import { Button } from "../Componentes/Buttons";
 import { Texto, TextoInput } from "../Componentes/Textos";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useRoute } from "@react-navigation/native";
 import MapView, { Marker } from 'react-native-maps';
-import React from 'react';
+import Toast from 'react-native-toast-message';
 
 export default function Menu() {
   const route = useRoute();
   const { user } = route.params || {}; // Desestruturação segura com valor padrão
-  
+
+  useEffect(() => {
+    if (user) {
+      Toast.show({
+        type: 'success',
+        text1: `Seja bem-vindo, ${user}!`,
+        position: 'center', // Altere a posição para 'center'
+        visibilityTime: 4000,
+      });
+    }
+  }, [user]);
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.text}>
-        {user ? `Bem-vindo, ${user}` : 'Bem-vindo!'}
-      </Text>
 
       {/* VIEW DO INPUT */}
       <View style={styles.searchContainer}>
@@ -127,8 +136,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   text: {
-    fontSize: 20,
+    fontSize: 70,
     marginTop: 20,
   },
 });
-
