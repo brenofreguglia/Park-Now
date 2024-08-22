@@ -14,6 +14,7 @@ import Perfil from './src/Screens/Perfil';
 import Login from './src/Screens/Login';
 import Menu from './src/Screens/Menu';
 import EditarPerfil from './src/Screens/EditarPerfil';
+import SplachScreen from './src/Screens/SplachScreen';
 
 function LogoTitle() {
   const navigation = useNavigation();
@@ -56,10 +57,13 @@ export default function App() {
       console.error('Erro ao fazer logout:', error);
     }
   };
-
+  
   return (
     <NavigationContainer>
       <Drawer.Navigator screenOptions={{ headerShown: false }}>
+
+      <Drawer.Screen name="Spla" component={SplachScreen} />
+      
         <Drawer.Screen
           name="Menu"
           component={Menu}
