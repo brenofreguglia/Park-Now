@@ -16,7 +16,10 @@ const TextoInput = ({
   cor,
   descricao,
   value,
-  secureTextEntry
+  secureTextEntry,
+  label,
+  padding,
+  marginV
 }) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(!secureTextEntry);
 
@@ -30,6 +33,7 @@ const TextoInput = ({
         <TextInput
           placeholder={holder}
           placeholderTextColor={cor}
+          aria-label={label}
           style={[
             styles.textInput,
             {
@@ -38,6 +42,8 @@ const TextoInput = ({
               height: height,
               textAlign: lugar,
               fontSize: tamanho,
+              padding: padding,
+              marginVertical: marginV
             },
           ]}
           onChangeText={descricao}

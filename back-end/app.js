@@ -142,7 +142,9 @@ app.post('/login', async (req, res) => {
       const hash = crypto.createHash('SHA256').update(senha).digest('hex');
   
       // Definição da consulta SQL para buscar o ID, email e nome do usuário
-      const sql = "SELECT id, email, nome FROM cadastro WHERE email = ? AND senha = ?";
+    const sql = `SELECT id, email, nome FROM cadastro WHERE email = "${email}" AND senha = "${hash}"`;
+
+      console.log(sql)
   
       // Tentativa de conexão com o banco de dados
       let connection;
@@ -159,7 +161,7 @@ app.post('/login', async (req, res) => {
   
         if (rows.length === 1) {
           // Se o login for bem-sucedido, retorna o ID, email e nome do usuário
-          res.json({
+          res.status(200).json({
             msg: "Login realizado com sucesso",
             id: rows[0].id,         // Retorna o ID do usuário
             email: rows[0].email,   // Retorna o email do usuário
@@ -181,26 +183,55 @@ app.post('/login', async (req, res) => {
   });
 
 // Rota para atualizar perfil
-app.put('/atualizar', async (req, res) => {
-  const { id, nome, telefone, email, senha } = req.body;
-
-  if (!id || !nome || !telefone || !email || !senha) {
-    return res.status(400).json({ error: 'Todos os campos são obrigatórios' });
-  }
-
-  try {
-    const hash = crypto.createHash('SHA256').update(senha).digest('hex');
-    const [result] = await pool.execute('UPDATE cadastro SET nome = ?, telefone = ?, email = ?, senha = ? WHERE id = ?', [nome, telefone, email, hash, id]);
-
-    if (result.affectedRows > 0) {
-      res.json({ success: true });
-    } else {
-      res.status(400).json({ error: 'Erro ao atualizar o perfil' });
+app.put('/atualizar/:id', async (req, res) => {
+    const id = req.params.id; // Obtém o ID da URL
+    const { nome, sobrenome, telefone, email, senha, cpf, endereco, cep } = req.body;
+  
+    if (!id || !nome || !sobrenome || !telefone || !email || !senha || !cpf || !endereco || !cep) {
+      return res.status(400).json({ error: 'Todos os campos são obrigatórios' });
     }
-  } catch (error) {
-    console.error('Erro ao atualizar perfil:', error);
-    res.status(500).json({ error: 'Erro interno do servidor' });
-  }
+  
+    try {
+      // Criptografar a senha usando bcrypt
+      const salt = await bcrypt.genSalt(10);
+      const hash = await bcrypt.hash(senha, salt);
+  
+      // Atualizar o perfil no banco de dados
+      const [result] = await pool.execute(
+        `UPDATE cadastro SET nome = ?, sobrenome = ?, telefone = ?, email = ?, senha = ?, cpf = ?, endereco = ?, cep = ? WHERE id = ?`,
+        [nome, sobrenome, telefone, email, hash, cpf, endereco, cep, id]
+      );
+  
+      if (result.affectedRows > 0) {
+        res.json({ success: true });
+      } else {
+        res.status(400).json({ error: 'Erro ao atualizar o perfil' });
+      }
+    } catch (error) {
+      console.error('Erro ao atualizar perfil:', error);
+      res.status(500).json({ error: 'Erro interno do servidor' });
+    }
+  });
+
+// Rota para buscar usuário por ID
+app.get('/buscar/:id', async (req, res) => {
+    const id = req.params.id;
+
+    try {
+        const [rows] = await pool.execute(
+            `SELECT nome, sobrenome, telefone, email, cpf, endereco, cep FROM cadastro WHERE id = ?`,
+            [id]
+        );
+
+        if (rows.length > 0) {
+            res.json(rows[0]);
+        } else {
+            res.status(404).json({ error: 'Usuário não encontrado' });
+        }
+    } catch (error) {
+        console.error('Erro ao buscar usuário:', error);
+        res.status(500).json({ error: 'Erro interno do servidor' });
+    }
 });
 
 // ROTA PRA CADASTRAR O LOCAL 

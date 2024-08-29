@@ -1,39 +1,43 @@
-document.getElementById('loginForm').addEventListener('submit', function(event) {
-    event.preventDefault(); // Previne o comportamento padrão de envio do formulário
+document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('loginButton').addEventListener('click', async function () {
+        // Captura os valores dos campos
+        const email = document.getElementById('email').value.trim();
+        const senha = document.getElementById('senha').value.trim();
 
-    // Captura os valores dos campos
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
+        // alert(senha)
 
-    // Validação simples (pode ser expandida conforme necessário)
-    if (username === '' || password === '') {
-        alert('Por favor, preencha todos os campos.');
-        return;
-    }
-
-    // Envia os dados para o servidor
-    fetch('/login', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            username: username,
-            password: password
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            alert('Login bem-sucedido!');
-            // Redirecionar ou realizar outra ação após o login bem-sucedido
-            window.location.href = '/dashboard'; // Exemplo de redirecionamento
-        } else {
-            alert('Usuário ou senha inválidos.');
+        // Validação simples
+        if (email === '' || senha === '') {
+            alert('Por favor, preencha todos os campos.');
+            return;
         }
-    })
-    .catch(error => {
-        console.error('Erro:', error);
-        alert('Ocorreu um erro. Tente novamente mais tarde.');
+
+        // Desabilita o botão de envio para evitar múltiplos envios
+        const loginButton = document.getElementById('loginButton');
+        if (loginButton) {
+            loginButton.disabled = true;
+        } else {
+            console.error('Botão de login não encontrado.');
+        }
+
+        const response = await fetch('http://10.111.9.17:3000/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: email,
+                senha: senha
+            })
+        })
+        if (!response.ok) {
+            throw new Error(`Response status:  ${response.status}`);
+        }
+        else{
+            const json = await response.json();
+            // console.log(json);
+            window.location.href = './cadastrar.html'; // Exemplo de redirecionamento
+
+        }
     });
 });

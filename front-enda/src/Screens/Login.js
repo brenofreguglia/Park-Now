@@ -6,13 +6,13 @@ import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const al = Dimensions.get('screen').height;
-const rota = "http://10.111.9.17:3000";  // Inclui a porta na URL
+const rota = "http://10.111.9.17:3000";
 
 export default function Login() {
 
   const navigation = useNavigation();
-  const [login, setLogin] = useState('');
-  const [senha, setSenha] = useState('');
+  const [login, setLogin] = useState('breno@gmail.com');
+  const [senha, setSenha] = useState('BHgf#078');
   const [error, setError] = useState('');
 
   const verificarLogin = async () => {
@@ -35,16 +35,19 @@ export default function Login() {
   
       if (contentType && contentType.includes("application/json")) {
         const data = await response.json();
+        console.log(data)
         if (response.ok) {
           if (data.id) {
             await AsyncStorage.setItem('isLoggedIn', 'true');
             await AsyncStorage.setItem('userId', data.id.toString());
             const userName = data.nome || 'Usuário';
             await AsyncStorage.setItem('userName', userName);
+
+            let id = data.id
   
             navigation.reset({
               index: 0,
-              routes: [{ name: 'Menu', params: { user: userName } }],
+              routes: [{ name: 'Menu', params: { user: userName, id:id } }],
             });
           } else {
             setError('Resposta do servidor inválida');

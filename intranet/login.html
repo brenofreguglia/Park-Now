@@ -10,24 +10,28 @@
 </head>
 
 <body>
-    
-    <img class="foto1" src="carro23.png" alt="">
+
+    <img class="foto1" src="carro23.png" alt="Imagem de um carro">
     <div class="login-container">
         <h2>Login</h2>
-        <form action="/login" method="post">
-            <div class="input-group">
-                <label for="email">Usuário:</label>
-                <input type="text" id="email" name="email" required>
-            </div>
-            <div class="input-group">
-                <label for="password">Senha:</label>
-                <input type="password" id="password" name="password" required>
-            </div>
-            <button type="submit">Entrar</button>
-            <p><a href="index.html" class="back-link">Voltar para a Página Inicial</a></p> 
-        </form>
+        <div class="input-group">
+            <label for="email">Email:</label>
+            <input type="text" id="email" name="email" required>
+        </div>
+
+        <div class="input-group">
+            <label for="senha">Senha:</label>
+            <input type="password" id="senha" name="password" required>
+        </div>
+
+        <button id="loginButton">Login</button>
+
+        <p><a href="index.html" class="back-link">Voltar para a Página Inicial</a></p>
     </div>
+    
     <script src="script.js"></script>
 </body>
 
 </html>
+
+<!-- login.html -->

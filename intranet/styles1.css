@@ -75,3 +75,23 @@ button:hover {
     transform: translateX(-50%); /* Ajusta a posição horizontal para a centralização exata */
     max-width: 100%; /* Garante que a imagem não ultrapasse a largura da tela */
 }
+.login-container {
+    position: relative;
+    z-index: 1; /* Garantir que a div está acima de outros elementos */
+}
+
+.input-group {
+    margin-bottom: 15px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+
+.foto1 {
+    display: block;
+    margin: 0 auto;
+}

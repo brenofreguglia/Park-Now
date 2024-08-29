@@ -9,14 +9,18 @@ const screenHeight = Dimensions.get('screen').height;
 
 export default function Perfil({ handleLogout }) {
   const [userName, setUserName] = useState(''); // Estado para armazenar o nome do usuário
+  // const [userId, setuserId] = useState(''); // Estado para armazenar o nome do usuário
+
   const navigation = useNavigation();
 
   useEffect(() => {
     const fetchUserName = async () => {
       try {
         const nome = await AsyncStorage.getItem('userName'); // Assumindo que o nome do usuário está armazenado como 'userName'
+        // const id = await AsyncStorage.getItem('userId'); // Assumindo que o nome do usuário está armazenado como 'userName'
         if (nome) {
           setUserName(nome);
+          // setuserId(id);
         } else {
           console.error('Nome do usuário não encontrado');
         }
