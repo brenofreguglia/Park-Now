@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, TextInput, View, Image, TouchableOpacity, Dimensions, Alert } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+const rota = "http://10.111.9.17:3000";
 const screenHeight = Dimensions.get('screen').height;
 
 export default function EditarPerfil() {
@@ -17,22 +18,19 @@ export default function EditarPerfil() {
   const [userId, setUserId] = useState(null);
 
   const navigation = useNavigation();
-  const route = useRoute();
 
   useEffect(() => {
-    // Carregar o userId e outros dados iniciais se estiverem disponíveis
     const fetchUserData = async () => {
       try {
         const id = await AsyncStorage.getItem('userId');
         if (id) {
           setUserId(id);
 
-          // Opcional: Carregar os dados do perfil para edição, se necessário
-          // const response = await fetch(`https://10.111.9.16:3000/usuario/${id}`);
-          // const userData = await response.json();
-          // setName(userData.nome);
-          // setPhone(userData.telefone);
-          // setEmail(userData.email);
+          const response = await fetch(`${rota}/atualizar/${id}`);
+          const userData = await response.json();
+          setName(userData.nome);
+          setPhone(userData.telefone);
+          setEmail(userData.email);
         } else {
           Alert.alert('Erro', 'ID do usuário não encontrado');
         }
@@ -70,7 +68,7 @@ export default function EditarPerfil() {
     }
 
     try {
-      const response = await fetch('https://10.111.9.16:3000/atualizar', {
+      const response = await fetch('https://10.111.9.17:3000/atualizar', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -165,6 +163,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 20,
     top: 40,
+    zIndex: 1, // Garantir que o botão esteja acima de outros elementos
   },
   profileHeader: {
     backgroundColor: '#73D2C0',

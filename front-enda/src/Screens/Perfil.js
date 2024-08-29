@@ -1,13 +1,32 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Image, ScrollView, Dimensions, TouchableOpacity, Alert } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Texto } from '../Componentes/Textos';
 
 const screenHeight = Dimensions.get('screen').height;
 
 export default function Perfil({ handleLogout }) {
+  const [userName, setUserName] = useState(''); // Estado para armazenar o nome do usuário
   const navigation = useNavigation();
+
+  useEffect(() => {
+    const fetchUserName = async () => {
+      try {
+        const nome = await AsyncStorage.getItem('userName'); // Assumindo que o nome do usuário está armazenado como 'userName'
+        if (nome) {
+          setUserName(nome);
+        } else {
+          console.error('Nome do usuário não encontrado');
+        }
+      } catch (error) {
+        console.error('Erro ao obter o nome do usuário do AsyncStorage:', error);
+      }
+    };
+
+    fetchUserName();
+  }, []);
 
   const VoltarTela = () => {
     navigation.navigate("Menu");
@@ -50,7 +69,6 @@ export default function Perfil({ handleLogout }) {
 
   return (
     <View style={styles.container}>
-
       <View style={styles.profileHeader}>
         <TouchableOpacity style={styles.backButton} onPress={VoltarTela}>
           <MaterialIcons name="arrow-back" size={24} color="black" />
@@ -60,7 +78,8 @@ export default function Perfil({ handleLogout }) {
           style={styles.image}
         />
         <View style={styles.profileDetails}>
-          <Text style={styles.profileName}>Nome S.</Text>
+          {/* <Text style={styles.profileName}>{userName}</Text> Exibe o nome do usuário */}
+          <Texto cor={"#fff"} tamanho={24} marginR={10} msg={userName}/> 
           <TouchableOpacity style={styles.editButton} onPress={handleEditPress}>
             <Text style={styles.editButtonText}>Editar</Text>
           </TouchableOpacity>
@@ -111,12 +130,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  profileName: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#fff',
-    marginRight: 10,
-  },
+  // profileName: {
+  //   fontSize: 24,
+  //   fontWeight: 'bold',
+  //   color: '#fff',
+  //   marginRight: 10,
+  // },
   editButton: {
     paddingHorizontal: 20,
     paddingVertical: 10,

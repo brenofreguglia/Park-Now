@@ -4,11 +4,11 @@ import LottieView from "lottie-react-native";
 import { useNavigation } from '@react-navigation/native';
 
 const SplachScreen = () => {
-  const navigation = useNavigation(); // Hook para la navegación
+  const navigation = useNavigation(); 
 
-  // Función para navegar a la pantalla de Login
+
   const handleAnimationFinish = () => {
-    navigation.navigate('Login'); // 'Login' es el nombre de la pantalla en tu stack
+    navigation.navigate('Login'); 
   };
 
   return (

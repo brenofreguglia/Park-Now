@@ -6,55 +6,62 @@ import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const al = Dimensions.get('screen').height;
-const rota = "http://10.111.9.8"
+const rota = "http://10.111.9.17:3000";  // Inclui a porta na URL
 
 export default function Login() {
+
   const navigation = useNavigation();
   const [login, setLogin] = useState('');
   const [senha, setSenha] = useState('');
-  const [error, setError] = useState('');  // Estado para armazenar a mensagem de erro
+  const [error, setError] = useState('');
 
   const verificarLogin = async () => {
     if (!login || !senha) {
-      setError('Por favor, preencha todos os campos');  // Mensagem de erro se os campos estiverem vazios
+      setError('Por favor, preencha todos os campos');
       return;
     }
-
+  
     try {
       console.log("clicou");
-      const response = await fetch(`${rota}:3000/login`, {
+      const response = await fetch(`${rota}/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ email: login, senha: senha }),
       });
-
-      const data = await response.json();
-      if (!response.ok) {
-        setError(data.msg || 'Credenciais inválidas');
-        return;
-      }
-
-      if (data.email) {
-        await AsyncStorage.setItem('isLoggedIn', 'true');
-
-        const userName = data.nome || 'Usuário';
-        await AsyncStorage.setItem('userName', userName);
-
-        navigation.reset({
-          index: 0,
-          routes: [{ name: 'Menu', params: { user: userName } }],
-        });
+  
+      const contentType = response.headers.get("content-type");
+  
+      if (contentType && contentType.includes("application/json")) {
+        const data = await response.json();
+        if (response.ok) {
+          if (data.id) {
+            await AsyncStorage.setItem('isLoggedIn', 'true');
+            await AsyncStorage.setItem('userId', data.id.toString());
+            const userName = data.nome || 'Usuário';
+            await AsyncStorage.setItem('userName', userName);
+  
+            navigation.reset({
+              index: 0,
+              routes: [{ name: 'Menu', params: { user: userName } }],
+            });
+          } else {
+            setError('Resposta do servidor inválida');
+          }
+        } else {
+          setError(data.msg || 'Credenciais inválidas');
+        }
       } else {
-        setError('Resposta do servidor inválida');
+        const text = await response.text();
+        console.error('Resposta inesperada do servidor:', text);
+        setError('Resposta inesperada do servidor');
       }
     } catch (error) {
       console.error('Erro ao fazer login:', error.message);
       setError('Erro ao se conectar ao servidor');
     }
   };
-
   const irParaCadastro = () => {
     navigation.navigate('Cadastro');
   };

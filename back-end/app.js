@@ -131,8 +131,8 @@ app.post('/cadastro', async (req, res) => {
 app.post('/login', async (req, res) => {
     try {
       const { email, senha } = req.body;
-
-      console.log(email, senha)
+  
+      console.log('Recebido:', email, senha);
   
       // Validação dos dados recebidos
       if (!email || !senha) {
@@ -141,17 +141,38 @@ app.post('/login', async (req, res) => {
   
       const hash = crypto.createHash('SHA256').update(senha).digest('hex');
   
-      // Definição da consulta SQL
-      const sql = "SELECT email FROM cadastro WHERE email = ? AND senha = ?";
-      
-      const connection = await pool.getConnection();
-      const [rows] = await connection.execute(sql, [email, hash]);
-      connection.release();
+      // Definição da consulta SQL para buscar o ID, email e nome do usuário
+      const sql = "SELECT id, email, nome FROM cadastro WHERE email = ? AND senha = ?";
   
-      if (rows.length === 1) {
-        res.json({ msg: "Login realizado com sucesso", email: rows[0].email });
-      } else {
-        res.status(401).json({ msg: "Email ou Senha incorreta" });
+      // Tentativa de conexão com o banco de dados
+      let connection;
+      try {
+        connection = await pool.getConnection();
+      } catch (dbError) {
+        console.error("Erro ao conectar ao banco de dados:", dbError);
+        return res.status(500).json({ error: "Erro ao conectar ao banco de dados" });
+      }
+  
+      try {
+        const [rows] = await connection.execute(sql, [email, hash]);
+        connection.release();
+  
+        if (rows.length === 1) {
+          // Se o login for bem-sucedido, retorna o ID, email e nome do usuário
+          res.json({
+            msg: "Login realizado com sucesso",
+            id: rows[0].id,         // Retorna o ID do usuário
+            email: rows[0].email,   // Retorna o email do usuário
+            nome: rows[0].nome      // Retorna o nome do usuário
+          });
+        } else {
+          res.status(401).json({ msg: "Email ou Senha incorreta" });
+        }
+      } catch (queryError) {
+        console.error("Erro ao executar a query:", queryError);
+        res.status(500).json({ error: "Erro interno ao processar login" });
+      } finally {
+        if (connection) connection.release(); // Garante que a conexão será liberada
       }
     } catch (error) {
       console.error("Erro ao autenticar usuário:", error);

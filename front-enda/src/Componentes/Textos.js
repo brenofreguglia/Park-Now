@@ -54,7 +54,7 @@ const TextoInput = ({
   );
 };
 
-const Texto = ({ msg, tamanho, cor, margin, acao }) => {
+const Texto = ({ msg, tamanho, cor, margin, acao, marginR }) => {
   return (
     <Text
       onPress={acao}
@@ -64,6 +64,7 @@ const Texto = ({ msg, tamanho, cor, margin, acao }) => {
           fontSize: tamanho,
           color: cor,
           margin: margin,
+          marginRight: marginR
         },
       ]}
     >
