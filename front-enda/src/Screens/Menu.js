@@ -100,6 +100,7 @@ export default function Menu() {
           ref={mapRef}
           style={styles.map}
           region={region}
+          // mapType='satellite'
         >
           {markerLocation && (
             <Marker

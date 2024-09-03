@@ -280,7 +280,7 @@ app.get('/local/:nome/vagas', (req, res) => {
 // });
 
 // ROTA PRA CADASTRAR O LOCAL 
-/*app.post('/api/parknow/local', async (req, res) => {
+app.post('/cadastro/local', async (req, res) => {
 
     try {
         const { id_lugar, nome, cidade, endereco, cep, vagas, func_horarios } = req.body
@@ -295,7 +295,7 @@ app.get('/local/:nome/vagas', (req, res) => {
         console.log(`O Erro que ocorreu foi :${error}`)
         res.status(500).json({ error: 'Deu algum erro no cadastro' })
     }
-}); */
+}); 
 
 
 // ROTA DO CLIENTE
