@@ -234,6 +234,51 @@ app.get('/buscar/:id', async (req, res) => {
     }
 });
 
+// Rota para obter a quantidade de vagas de um local específico pelo nome
+app.get('/local/:nome/vagas', (req, res) => {
+  const localNome = req.params.nome;
+
+  const query = 'SELECT vagas FROM local WHERE nome = ?';
+
+  pool.query(query, [localNome], (err, results) => {
+    if (err) {
+      console.error('Erro ao buscar vagas:', err);
+      res.status(500).json({ error: 'Erro ao buscar vagas.' });
+      return;
+    }
+
+    if (results.length > 0) {
+      res.json({ vagas: results[0].vagas });
+    } else {
+      res.status(404).json({ error: 'Local não encontrado.' });
+    }
+  });
+});
+
+// // Rota para obter a quantidade de vagas de um local específico
+// app.get('/local/:id/vagas', (req, res) => {
+//   const localId = req.params.id;
+
+//   const query = 'SELECT vagas FROM local WHERE id_lugar = ?';
+//   db.query(query, [localId], (err, results) => {
+//     if (err) {
+//       console.error('Erro ao buscar vagas:', err);
+//       res.status(500).json({ error: 'Erro ao buscar vagas.' });
+//       return;
+//     }
+
+//     if (results.length > 0) {
+//       res.json({ vagas: results[0].vagas });
+//     } else {
+//       res.status(404).json({ error: 'Local não encontrado.' });
+//     }
+//   });
+// });
+
+// app.listen(port, () => {
+//   console.log(`Servidor rodando na porta ${port}`);
+// });
+
 // ROTA PRA CADASTRAR O LOCAL 
 /*app.post('/api/parknow/local', async (req, res) => {
 

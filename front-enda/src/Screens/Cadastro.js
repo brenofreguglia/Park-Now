@@ -5,7 +5,7 @@ import { Texto, TextoInput } from "../Componentes/Textos";
 import { useNavigation } from "@react-navigation/native";
 
 const { width, height } = Dimensions.get("window");
-const rota = "http://10.111.9.17"
+const rota = "http://10.111.9.16"
 
 export default function Cadastro({}) {
   const navigation = useNavigation();
