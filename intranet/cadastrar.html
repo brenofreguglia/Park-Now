@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
+ 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,15 +8,15 @@
     <link rel="stylesheet" href="styles2.css"> <!-- Usando o mesmo arquivo CSS da tela de login -->
     <link rel="icon" type="image/png" sizes="32x32" href="IMG.png">
 </head>
-
+ 
 <body>
     <div class="container">
         <div class="image-container">
-            <img class="foto1" src="carro23.png" alt="">
+            <img class="foto1" src="carro23.png" alt="Imagem de carro">
         </div>
-        <div class="login-container">
+        <div class="form-container">
             <h2>Cadastro</h2>
-            <form action="/cadastro" method="post">
+            <form action="/cadastro" method="post" id="formCadastro">
                 <div class="input-group">
                     <label for="nome">Nome:</label>
                     <input type="text" id="nome" name="nome" required>
@@ -31,23 +31,23 @@
                 </div>
                 <div class="input-group">
                     <label for="cep">CEP:</label>
-                    <input type="text" id="cep" name="cep" required>
+                    <input type="text" id="cep" name="cep" required pattern="\d{5}-\d{3}" placeholder="12345-678">
                 </div>
                 <div class="input-group">
                     <label for="qtd_vagas">Quantidade de Vagas:</label>
-                    <input type="text" id="qtd_vagas" name="qtd_vagas" required>
+                    <input type="number" id="vagas" name="vagas" required>
                 </div>
                 <div class="input-group">
                     <label for="fuso_hora">Fuso Horário:</label>
-                    <input type="text" id="fuso_hora" name="fuso_hora" required>
+                    <input type="text" id="func_horario" name="func_horario" required>
                 </div>
                 <div class="input-group">
                     <label for="latitude">Latitude:</label>
-                    <input type="text" id="latitude" name="latitude" required>
+                    <input type="number" step="any" id="latitude" name="latitude" required>
                 </div>
                 <div class="input-group">
                     <label for="longitude">Longitude:</label>
-                    <input type="text" id="longitude" name="longitude" required>
+                    <input type="number" step="any" id="longitude" name="longitude" required>
                 </div>
                 <button type="submit">Cadastrar</button>
                 <p><a href="index.html" class="back-link">Voltar para a Página Inicial</a></p>
@@ -56,5 +56,5 @@
     </div>
     <script src="script.js"></script>
 </body>
-
+ 
 </html>
