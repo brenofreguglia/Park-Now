@@ -182,35 +182,34 @@ app.post('/login', async (req, res) => {
     }
   });
 
-// Rota para atualizar perfil
-app.put('/atualizar/:id', async (req, res) => {
-    const id = req.params.id; // Obtém o ID da URL
-    const { nome, sobrenome, telefone, email, senha, cpf, endereco, cep } = req.body;
+  // Rota para atualizar perfil
+  app.put('/atualizar/:id', async (req, res) => {
+      const id = req.params.id; // Obtém o ID da URL
+      const { nome, sobrenome, telefone, email, senha, cpf, endereco, cep } = req.body;
   
-    if (!id || !nome || !sobrenome || !telefone || !email || !senha || !cpf || !endereco || !cep) {
-      return res.status(400).json({ error: 'Todos os campos são obrigatórios' });
-    }
-  
-    try {
-      // Criptografar a senha usando bcrypt
-      const salt = await bcrypt.genSalt(10);
-      const hash = await bcrypt.hash(senha, salt);
-  
-      // Atualizar o perfil no banco de dados
-      const [result] = await pool.execute(
-        `UPDATE cadastro SET nome = ?, sobrenome = ?, telefone = ?, email = ?, senha = ?, cpf = ?, endereco = ?, cep = ? WHERE id = ?`,
-        [nome, sobrenome, telefone, email, hash, cpf, endereco, cep, id]
-      );
-  
-      if (result.affectedRows > 0) {
-        res.json({ success: true });
-      } else {
-        res.status(400).json({ error: 'Erro ao atualizar o perfil' });
+      if (!id || !nome || !sobrenome || !telefone || !email || !senha || !cpf || !endereco || !cep) {
+          return res.status(400).json({ error: 'Todos os campos são obrigatórios' });
       }
-    } catch (error) {
-      console.error('Erro ao atualizar perfil:', error);
-      res.status(500).json({ error: 'Erro interno do servidor' });
-    }
+  
+      try {
+          // Criptografar a senha usando SHA-256
+          const hash = crypto.createHash('SHA256').update(senha).digest('hex');
+  
+          // Atualizar o perfil no banco de dados
+          const [result] = await pool.execute(
+              `UPDATE cadastro SET nome = ?, sobrenome = ?, telefone = ?, email = ?, senha = ?, cpf = ?, endereco = ?, cep = ? WHERE id = ?`,
+              [nome, sobrenome, telefone, email, hash, cpf, endereco, cep, id]
+          );
+  
+          if (result.affectedRows > 0) {
+              res.json({ success: true, msg: 'Perfil atualizado com sucesso!' });
+          } else {
+              res.status(400).json({ error: 'Erro ao atualizar o perfil' });
+          }
+      } catch (error) {
+          console.error('Erro ao atualizar perfil:', error);
+          res.status(500).json({ error: 'Erro interno do servidor' });
+      }
   });
 
 // Rota para buscar usuário por ID

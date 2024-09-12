@@ -85,19 +85,23 @@ export default function App() {
         >
           {(props) => <Perfil {...props} handleLogout={handleLogout} />}
         </Drawer.Screen>
-        <Drawer.Screen name='Estacionamento' component={Estacionamento2} />
+        <Drawer.Screen name='Estacionamento' component={Estacionamento2}   options={{
+            drawerItemStyle: { display: 'none' }
+          }}/>
         <Drawer.Screen
           name="Login"
           component={Login}
-          options={{ headerShown: false }}
-        />
+          options={{ headerShown: false, drawerItemStyle: { display: 'none' } }}
+         />
         <Drawer.Screen
           name="Cadastro"
           component={Cadastro}
-          options={{ headerShown: false }}
+          options={{ headerShown: false, drawerItemStyle: { display: 'none' } }}
         />
         <Drawer.Screen name="FaleConosco" component={FaleConosco} />
-        <Drawer.Screen name="EditarPerfil" component={EditarPerfil} />
+        <Drawer.Screen name="EditarPerfil" component={EditarPerfil} options={{
+          drawerItemStyle: { display: 'none' }
+        }} />
       </Drawer.Navigator>
 
       {/* Adicione o Toast aqui para ter acesso global */}

@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { StyleSheet, View, Image, ScrollView, TextInput, TouchableOpacity, Alert, Text } from "react-native";
 import { Button } from "../Componentes/Buttons";
 import { Texto, TextoInput } from "../Componentes/Textos";
-import { useRoute } from "@react-navigation/native";
+import { useRoute, useNavigation } from "@react-navigation/native"; // Adicionado useNavigation
 import MapView, { Marker } from 'react-native-maps';
 import Toast from 'react-native-toast-message';
 import * as Location from 'expo-location'; // Importando Location
@@ -10,10 +10,12 @@ import * as Location from 'expo-location'; // Importando Location
 export default function Menu() {
   const route = useRoute();
   const { user } = route.params || {}; // Desestruturação segura com valor padrão
+  const navigation = useNavigation(); // Hook de navegação
+
   const [search, setSearch] = useState('');
   const [region, setRegion] = useState({
-    latitude: -22.1256,
-    longitude: -51.388,
+    latitude: -22.121265,
+    longitude: -51.383400,
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
   });
@@ -79,6 +81,15 @@ export default function Menu() {
     }
   };
 
+  // Funções para navegação
+  const navigateToEstacionamentoCarro = () => {
+    navigation.navigate('Estacionamento', { vehicleType: 'carro' });
+  };
+
+  const navigateToEstacionamentoMoto = () => {
+    navigation.navigate('Estacionamento', { vehicleType: 'moto' });
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       {/* VIEW DO INPUT */}
@@ -100,7 +111,6 @@ export default function Menu() {
           ref={mapRef}
           style={styles.map}
           region={region}
-          // mapType='satellite'
         >
           {markerLocation && (
             <Marker
@@ -123,14 +133,14 @@ export default function Menu() {
         <View style={styles.vehicle}>
           <Image source={require("../../assets/Imgs/carroMenu.jpg")} style={styles.vehicleImage} />
           <Texto msg={"CARRO"} tamanho={16} />
-          <Button width={120} borda={30} height={50} color={"#73D2C0"} texto={">>>"} />
+          <Button width={120} borda={30} height={50} color={"#73D2C0"} texto={">>>"} acao={navigateToEstacionamentoCarro}/>
         </View>
         
         {/* VIEW MOTO */}
         <View style={styles.vehicle}>
           <Image source={require("../../assets/Imgs/motoMenu.jpg")} style={styles.vehicleImage} />
           <Texto msg={"MOTO"} tamanho={16} />
-          <Button width={120} borda={30} height={50} color={"#73D2C0"} texto={">>>"} />
+          <Button width={120} borda={30} height={50} color={"#73D2C0"} texto={">>>"} acao={navigateToEstacionamentoMoto}/>
         </View>
       </View>
     </ScrollView>

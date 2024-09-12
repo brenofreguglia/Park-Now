@@ -7,6 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const rota = "http://10.111.9.16:3000";
 const screenHeight = Dimensions.get('screen').height;
+const screenWidth = Dimensions.get('screen').width
 
 export default function EditarPerfil() {
   const [name, setName] = useState('');
@@ -21,26 +22,22 @@ export default function EditarPerfil() {
   const [profileImage, setProfileImage] = useState(null);
   const [userId, setUserId] = useState(null);
   const [errors, setErrors] = useState({});
-  const [showPassword, setShowPassword] = useState(false); // Estado para mostrar/ocultar a senha
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false); // Estado para mostrar/ocultar a senha de confirmação
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const navigation = useNavigation();
 
   useEffect(() => {
     const fetchUserData = async () => {
         try {
-            const id = await AsyncStorage.getItem('userId'); // Obtém o ID do usuário do AsyncStorage
+            const id = await AsyncStorage.getItem('userId'); 
             if (id) {
-                console.log(`ID do usuário: ${id}`);
                 setUserId(id);
 
-                // Fazendo a requisição ao backend
-                let resposta = await fetch(`${rota}/buscar/${id}`); // Concatenação correta da rota
+                let resposta = await fetch(`${rota}/buscar/${id}`); 
 
                 if (resposta.ok) {
                     let dados = await resposta.json();
-
-                    // Preenche os estados com os dados retornados do banco de dados
                     setName(dados.nome);
                     setsobrenome(dados.sobrenome);
                     setnumero(dados.telefone);
@@ -48,18 +45,13 @@ export default function EditarPerfil() {
                     setCpf(dados.cpf);
                     setendereco(dados.endereco);
                     setCep(dados.cep);
-
-                    console.log("Dados do usuário carregados com sucesso");
                 } else {
                     Alert.alert('Erro', 'Usuário não encontrado');
-                    console.error(`Erro: Usuário com ID ${id} não encontrado`);
                 }
             } else {
                 Alert.alert('Erro', 'ID do usuário não encontrado');
-                console.error('Erro: ID do usuário não encontrado no AsyncStorage');
             }
         } catch (erro) {
-            console.error('Erro ao carregar dados do usuário:', erro);
             Alert.alert('Erro', 'Não foi possível carregar os dados do usuário');
         }
     };
@@ -82,7 +74,6 @@ export default function EditarPerfil() {
 
   const validateFields = () => {
     const newErrors = {};
-
     if (!name) newErrors.name = 'Nome é obrigatório.';
     if (!sobrenome) newErrors.sobrenome = 'Sobrenome é obrigatório.';
     if (!email.includes('@')) newErrors.email = 'E-mail inválido.';
@@ -108,7 +99,7 @@ export default function EditarPerfil() {
     }
 
     try {
-      const response = await fetch(`${rota}/atualizar/${userId}`, { // Usando userId na URL
+      const response = await fetch(`${rota}/atualizar/${userId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -131,11 +122,9 @@ export default function EditarPerfil() {
       }
 
       const result = await response.json();
-      console.log('Success:', result);
       Alert.alert('Sucesso', 'Perfil atualizado com sucesso');
       navigation.goBack();
     } catch (error) {
-      console.error('Erro ao salvar os dados:', error);
       Alert.alert('Erro', 'Erro ao salvar os dados');
     }
   };
@@ -218,27 +207,23 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     position: 'absolute',
     top: 0,
-    paddingTop: 100,
+    paddingTop: 60, // Ajustado para mover a imagem mais para cima
   },
   image: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-    borderWidth: 3,
-    borderColor: '#fff',
+    width: 150,
+    height: 150,
+    borderRadius: 75,
+    marginBottom: 10,
   },
   card: {
-    marginTop: 220,
-    height: 600,
-    padding: 20,
-    width: '100%',
-    backgroundColor: '#fff',
-    borderRadius: 8,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 3,
+    width: screenWidth,
+    backgroundColor: 'white',
+    borderTopLeftRadius: 45,
+    borderTopRightRadius: 45,
+    marginTop: screenHeight * 0.30, // Ajustado para garantir que o botão não seja ocultado
+    padding: 25,
+    elevation: 5,
+    flex: 1, // Adiciona flex para permitir o ajuste de tamanho do card
   },
   inputContainer: {
     marginBottom: 15,
@@ -246,26 +231,24 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 16,
     fontWeight: 'bold',
-    marginBottom: 5,
   },
   inputWrapper: {
-    position: 'relative',
     flexDirection: 'row',
     alignItems: 'center',
   },
   input: {
-    height: 40,
     flex: 1,
-    borderColor: '#ddd',
     borderWidth: 1,
-    borderRadius: 4,
-    paddingHorizontal: 10,
+    borderColor: '#ccc',
+    padding: 10,
+    borderRadius: 5,
   },
   eyeIcon: {
     position: 'absolute',
     right: 10,
     top: '50%',
-    transform: [{ translateY: -12 }], // Ajusta a posição vertical do ícone
+    transform: [{ translateY: -20 }],
+    padding: 10,
   },
   errorText: {
     color: 'red',
@@ -274,16 +257,18 @@ const styles = StyleSheet.create({
   },
   saveButton: {
     backgroundColor: '#73D2C0',
-    paddingVertical: 15,
-    borderRadius: 5,
+    padding: 15,
+    borderRadius: 10,
     alignItems: 'center',
+    marginTop: 20,
   },
   saveButtonText: {
-    color: '#fff',
+    color: 'white',
     fontSize: 16,
     fontWeight: 'bold',
   },
   scrollContainer: {
-    paddingBottom: 20,
+    flexGrow: 1, // Permite que o conteúdo do FlatList ocupe o espaço disponível
+    justifyContent: 'center', // Centraliza o conteúdo verticalmente
   },
 });

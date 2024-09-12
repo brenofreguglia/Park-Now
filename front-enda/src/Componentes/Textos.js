@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Text, StyleSheet, Dimensions, TextInput, View, TouchableOpacity } from "react-native";
 import { Ionicons } from '@expo/vector-icons'; // Certifique-se de instalar @expo/vector-icons
 
-const Lg = Dimensions.get('screen').width;
+const { width } = Dimensions.get('window');
 
 const TextoInput = ({
   holder,
@@ -29,7 +29,8 @@ const TextoInput = ({
 
   return (
     <View style={[styles.container, { width: width, margin: margin }]}>
-      <View style={styles.inputContainer}>
+      {label && <Text style={styles.label}>{label}</Text>}
+      <View style={[styles.inputContainer, { width: width }]}>
         <TextInput
           placeholder={holder}
           placeholderTextColor={cor}
@@ -43,12 +44,13 @@ const TextoInput = ({
               textAlign: lugar,
               fontSize: tamanho,
               padding: padding,
-              marginVertical: marginV
+              marginVertical: marginV,
+              cor: cor
             },
           ]}
           onChangeText={descricao}
           value={value}
-          secureTextEntry={!isPasswordVisible} // Usa o estado para visibilidade
+          secureTextEntry={secureTextEntry && !isPasswordVisible} // Usa o estado para visibilidade
         />
         {secureTextEntry && (
           <TouchableOpacity onPress={togglePasswordVisibility} style={styles.eyeIcon}>
@@ -60,19 +62,11 @@ const TextoInput = ({
   );
 };
 
-const Texto = ({ msg, tamanho, cor, margin, acao, marginR }) => {
+const Texto = ({ msg, tamanho = 16, cor = '#000', margin = 0, acao, marginR = 0 , alinhamento}) => {
   return (
     <Text
       onPress={acao}
-      style={[
-        styles.texto,
-        {
-          fontSize: tamanho,
-          color: cor,
-          margin: margin,
-          marginRight: marginR
-        },
-      ]}
+      style={[styles.texto, { fontSize: tamanho, color: cor, margin: margin, marginRight: marginR, alignItems: alinhamento }]}
     >
       {msg}
     </Text>
@@ -81,15 +75,11 @@ const Texto = ({ msg, tamanho, cor, margin, acao, marginR }) => {
 
 const styles = StyleSheet.create({
   texto: {
-    justifyContent: "center",
-    textAlign: "center",
     fontWeight: "bold",
-    width: Lg / 2,
   },
   textInput: {
     flex: 1,
     paddingHorizontal: 15,
-    fontSize: 20,
     color: '#000',
   },
   inputContainer: {
@@ -97,11 +87,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 30,
     overflow: 'hidden',
+    position: 'relative', // Para garantir que o ícone esteja posicionado corretamente
   },
   eyeIcon: {
     position: 'absolute',
-    left: 270,
+    right: 10,
+    top: '50%',
+    transform: [{ translateY: -20 }],
     padding: 10,
+  },
+  label: {
+    color: '#000',
+    marginBottom: 5,
+    fontWeight: 'bold',
   },
 });
 

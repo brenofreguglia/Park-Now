@@ -99,16 +99,16 @@ export default function Cadastro({}) {
         data={campos}
         renderItem={({ item }) => (
           <View style={styles.inputContainer}>
-            <Texto msg={item.label} cor={"#fff"} tamanho={16} margin={5} />
+            <Texto msg={item.label} cor={"#000000"} tamanho={20} margin={0} />
             <TextoInput
               tamanho={20}
-              holder={item.placeholder}
               width={330}
-              borda={30}
-              height={60}
+              borda={25}
+              height={45}
               lugar={"left"}
-              margin={10}
-              cor={"white"}
+              margin={3}
+              cor={"#ffffff"}
+              color={"#ffffff7c"}
               value={item.value}
               descricao={(text) => handleInputChange(item.key, text)}
             />
@@ -122,10 +122,12 @@ export default function Cadastro({}) {
             <Button
               color={"#d2f0eee0"}
               texto={"Cadastrar"}
-              texcolor={"#b6b6b6"}
+              texcolor={"#000000"}
               tamanho={330}
               borda={30}
               height={50}
+              width={200}
+              margin={10}
               acao={handleCadastro}
             />
 
@@ -133,7 +135,7 @@ export default function Cadastro({}) {
               <Texto
                 acao={navigateToLogin}
                 msg={"Já possui uma conta? Faça o login"}
-                cor={"#989696"}
+                cor={"#000000"}
                 tamanho={15}
                 margin={20}
               />
@@ -170,7 +172,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   errorText: {
-    color: 'red',
+    color: '#000000',
     marginTop: 5,
     marginLeft: 10,
     fontSize: 14,
@@ -184,5 +186,8 @@ const styles = StyleSheet.create({
     height: 100,
     alignItems: "center",
     paddingVertical: 10,
+    borderTopLeftRadius: 45,
+    borderTopRightRadius: 45,
+    shadowColor: '#000',
   },
 });

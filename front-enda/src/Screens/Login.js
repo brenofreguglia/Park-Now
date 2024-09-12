@@ -5,14 +5,13 @@ import { TextoInput, Texto } from '../Componentes/Textos';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const al = Dimensions.get('screen').height;
+const { width, height } = Dimensions.get('window');
 const rota = "http://10.111.9.16:3000";
 
 export default function Login() {
-
   const navigation = useNavigation();
   const [login, setLogin] = useState('teste@gmail.com');
-  const [senha, setSenha] = useState('1234');
+  const [senha, setSenha] = useState('BHgf#123');
   const [error, setError] = useState('');
 
   const verificarLogin = async () => {
@@ -20,7 +19,7 @@ export default function Login() {
       setError('Por favor, preencha todos os campos');
       return;
     }
-  
+
     try {
       console.log("clicou");
       const response = await fetch(`${rota}/login`, {
@@ -30,12 +29,12 @@ export default function Login() {
         },
         body: JSON.stringify({ email: login, senha: senha }),
       });
-  
+
       const contentType = response.headers.get("content-type");
-  
+
       if (contentType && contentType.includes("application/json")) {
         const data = await response.json();
-        console.log(data)
+        console.log(data);
         if (response.ok) {
           if (data.id) {
             await AsyncStorage.setItem('isLoggedIn', 'true');
@@ -43,11 +42,11 @@ export default function Login() {
             const userName = data.nome || 'Usuário';
             await AsyncStorage.setItem('userName', userName);
 
-            let id = data.id
-  
+            let id = data.id;
+
             navigation.reset({
               index: 0,
-              routes: [{ name: 'Menu', params: { user: userName, id:id } }],
+              routes: [{ name: 'Menu', params: { user: userName, id: id } }],
             });
           } else {
             setError('Resposta do servidor inválida');
@@ -65,12 +64,13 @@ export default function Login() {
       setError('Erro ao se conectar ao servidor');
     }
   };
+
   const irParaCadastro = () => {
     navigation.navigate('Cadastro');
   };
 
   return (
-    <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+    <ScrollView contentContainerStyle={styles.scrollContainer}>
       <View style={styles.container}>
         <Image
           source={require('../../assets/Imgs/imagem.png')}
@@ -79,7 +79,7 @@ export default function Login() {
         <View style={styles.container_2}>
           <TextoInput
             color={"#D2F0EE"}
-            width={330}
+            width={width * 0.8}
             borda={30}
             margin={20}
             height={60}
@@ -92,7 +92,7 @@ export default function Login() {
           />
           <TextoInput
             color={"#D2F0EE"}
-            width={330}
+            width={width * 0.8}
             borda={30}
             height={60}
             lugar={"center"}
@@ -118,15 +118,15 @@ export default function Login() {
             texto={` Login`}
             texcolor={"white"}
             acao={verificarLogin}
-            width={50}
-            margin={23}
+            width={width * 0.8 * 0.5}
+            margin={30}
           />
           <Texto
             acao={irParaCadastro}
-            msg={"Ainda não possui uma conta? Cadastre-se"}
+            msg={`Ainda não possui uma\nconta? Cadastre-se`}
             tamanho={15}
-            margin={3}
-            cor={"#D9D9D9"}
+            margin={0}
+            cor={"#000000"}
           />
         </View>
       </View>
@@ -135,6 +135,9 @@ export default function Login() {
 }
 
 const styles = StyleSheet.create({
+  scrollContainer: {
+    flexGrow: 1,
+  },
   container: {
     flex: 1,
     backgroundColor: '#D2F0EE',
@@ -145,16 +148,19 @@ const styles = StyleSheet.create({
     backgroundColor: '#73D2C0',
     width: '100%',
     alignItems: 'center',
-    paddingVertical: 90,
+    paddingVertical: 100,
+    borderTopLeftRadius: 45,
+    borderTopRightRadius: 45,
+    shadowColor: '#000',
   },
   image: {
-    height: 250,
+    height: height * 0.3, // Ajusta a altura da imagem para 30% da altura da tela
     margin: 70,
     resizeMode: 'contain',
   },
   errorText: {
     color: '#000000',
-    fontWeight:  'bold',
+    fontWeight: 'bold',
     marginVertical: 10,
     fontSize: 16,
   },
