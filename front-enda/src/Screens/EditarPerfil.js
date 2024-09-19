@@ -123,7 +123,7 @@ export default function EditarPerfil() {
 
       const result = await response.json();
       Alert.alert('Sucesso', 'Perfil atualizado com sucesso');
-      navigation.goBack();
+      navigation.navigate("Perfil");
     } catch (error) {
       Alert.alert('Erro', 'Erro ao salvar os dados');
     }

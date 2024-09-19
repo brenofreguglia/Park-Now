@@ -4,7 +4,7 @@ import { Texto } from "./Textos";
 
 const Lg = Dimensions.get('screen').width
 
-const Button = ({texto, acao, color,  width, borda, height, texcolor, margin}) => {
+const Button = ({texto, acao, color,  width, borda, height, texcolor, margin, padding}) => {
     return (
 
         <TouchableOpacity style = {[styles.botoes,
@@ -12,7 +12,9 @@ const Button = ({texto, acao, color,  width, borda, height, texcolor, margin}) =
         width: width, 
         height: height, 
         borderRadius: borda,
-        margin:margin}]}  
+        margin:margin,
+        padding: padding
+        }]}  
         onPress={acao} >
             
             <Texto 

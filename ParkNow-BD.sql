@@ -47,12 +47,18 @@ CREATE TABLE IF NOT EXISTS `cadastro` (
   `telefone` varchar(15) NOT NULL,
   `email` varchar(250) NOT NULL,
   `senha` varchar(255) NOT NULL,
+  `reset_token` varchar(255) DEFAULT NULL,
+  `reset_token_expires` datetime DEFAULT NULL,
+  `verification_code` varchar(255) DEFAULT NULL,
+  `verification_expires` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
--- Copiando dados para a tabela parknow.cadastro: ~1 rows (aproximadamente)
-INSERT INTO `cadastro` (`id`, `nome`, `sobrenome`, `cpf`, `endereco`, `cep`, `telefone`, `email`, `senha`) VALUES
-	(1, 'BBBBB', 'AAAA', '462.709.348-93', 'Rua Teste Bom', '19160-00', '18998165080', 'teste@gmail.com', '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4');
+-- Copiando dados para a tabela parknow.cadastro: ~2 rows (aproximadamente)
+INSERT INTO `cadastro` (`id`, `nome`, `sobrenome`, `cpf`, `endereco`, `cep`, `telefone`, `email`, `senha`, `reset_token`, `reset_token_expires`, `verification_code`, `verification_expires`) VALUES
+	(1, 'breno', 'freguglia', '46270934893', 'Rua Teste Bom', '19160000', '18998165080', 'freguglia.breno@gmail.com', 'a5eaa5e6cb269a776bf1a7f0c617b1ab3e5bc19a06a86df18ffd732803471970', NULL, NULL, '806047', '2024-09-19 15:01:11'),
+	(2, 'Samuel', 'Caliel', '46270934893', 'rua teste miçl', '19067755', '18998165080', 'samuelcaliel69@gmail.com', 'a5eaa5e6cb269a776bf1a7f0c617b1ab3e5bc19a06a86df18ffd732803471970', NULL, NULL, '386669', '2024-09-19 14:44:26'),
+	(3, 'Jorge', 'Gabriel', '46270934893', 'rua teste jorge', '19065755', '18998165080', 'jorgegabrielcdsantos@gmail.com', '36c6ee3db1019c0a9270ac2e0688809d28f48754e3007885e7ec096f2bbab194', NULL, NULL, '779836', '2024-09-19 14:47:51');
 
 -- Copiando estrutura para tabela parknow.local
 CREATE TABLE IF NOT EXISTS `local` (

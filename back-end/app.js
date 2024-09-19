@@ -3,6 +3,8 @@ const cors = require('cors')
 const crypto = require('crypto')
 const mysql = require('mysql2/promise')
 const bodyparser = require('body-parser')
+const nodemailer = require('nodemailer');
+
 
 const app = express()
 const porta = 3000
@@ -253,6 +255,124 @@ app.get('/local/:nome/vagas', (req, res) => {
     }
   });
 });
+
+// Função para gerar código de verificação
+function generateVerificationCode() {
+    return Math.floor(100000 + Math.random() * 900000); // Gera um código de 6 dígitos
+}
+
+// Configuração de envio de e-mail
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'parknowempresa@gmail.com',
+        pass: 'fkgx ixgp supr auog', // Certifique-se de usar a senha correta
+    },
+});
+
+// Rota para solicitar redefinição de senha
+app.post('/forgot-password', async (req, res) => {
+    const { email } = req.body;
+    const verificationCode = generateVerificationCode();
+    const expirationTime = new Date(Date.now() + 3600000); // expira em 1 hora
+
+    try {
+        const connection = await pool.getConnection();
+        const query = 'UPDATE cadastro SET verification_code = ?, verification_expires = ? WHERE email = ?';
+        const [result] = await connection.execute(query, [verificationCode, expirationTime, email]);
+
+        connection.release();
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: 'Usuário não encontrado' });
+        }
+
+        const mailOptions = {
+            from: 'parknowempresa@gmail.com',
+            to: email,
+            subject: 'Redefinição de Senha - Park Now',
+            text: `Redefinição de Senha - Park Now\n\nVocê solicitou a redefinição de senha para sua conta no Park Now.\n\nCódigo de verificação: ${verificationCode}`,
+        };
+
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                console.error('Erro ao enviar e-mail:', error);
+                return res.status(500).json({ error: 'Erro ao enviar e-mail', message: error.message });
+            }
+            console.log('E-mail enviado:', info.response);
+            res.json({ message: 'Código de verificação enviado para o seu e-mail' });
+        });
+    } catch (err) {
+        console.error('Erro ao enviar código de verificação:', err);
+        res.status(500).json({ error: 'Erro interno do servidor' });
+    }
+});
+
+// Rota para verificar o código e redefinir senha
+app.post('/verify-code', async (req, res) => {
+    console.log(req.body);
+    const { code, email } = req.body;
+
+    // Verifica se email e código estão presentes
+    if (!email || !code) {
+        return res.status(400).json({ error: 'Email e código de verificação são obrigatórios' });
+    }
+
+    try {
+        const connection = await pool.getConnection();
+        try {
+            const query = 'SELECT * FROM cadastro WHERE email = ? AND verification_code = ? AND verification_expires > ?';
+            const [results] = await connection.execute(query, [email, code, new Date()]);
+
+            if (results.length === 0) {
+                return res.status(400).json({ error: 'Código de verificação inválido ou expirado' });
+            }
+
+            res.json({ success: true, message: 'Código verificado com sucesso' });
+        } finally {
+            connection.release();  // Libera a conexão, independentemente do sucesso ou erro
+        }
+    } catch (error) {
+        console.error('Erro ao verificar código de verificação:', error);
+        res.status(500).json({ error: 'Erro interno do servidor' });
+    }
+});
+
+app.post('/reset-password', async (req, res) => {
+    const { email, senha } = req.body;
+
+    if (!email || !senha) {
+        return res.status(400).json({ error: 'Campos de e-mail e senha são obrigatórios.' });
+    }
+
+    try {
+        const connection = await pool.getConnection();
+
+        // Verifica se o e-mail existe no banco de dados
+        const [user] = await connection.execute('SELECT * FROM cadastro WHERE email = ?', [email]);
+
+        if (user.length === 0) {
+            connection.release();
+            return res.status(404).json({ error: 'Usuário não encontrado.' });
+        }
+
+        // Criptografa a senha usando SHA-256
+        const hash = crypto.createHash('SHA256').update(senha).digest('hex');
+
+        // Atualiza a senha criptografada no banco de dados
+        const query = 'UPDATE cadastro SET senha = ? WHERE email = ?';
+        await connection.execute(query, [hash, email]);
+
+        connection.release();
+
+        res.json({ success: true, message: 'Senha redefinida com sucesso.' });
+    } catch (error) {
+        console.error('Erro ao redefinir a senha:', error);
+        res.status(500).json({ error: 'Erro interno do servidor.' });
+    }
+});
+
+
 
 // // Rota para obter a quantidade de vagas de um local específico
 // app.get('/local/:id/vagas', (req, res) => {

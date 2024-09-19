@@ -16,6 +16,10 @@ import Menu from './src/Screens/Menu';
 import EditarPerfil from './src/Screens/EditarPerfil';
 import SplachScreen from './src/Screens/SplachScreen';
 import Estacionamento2 from './src/Screens/Estacionamento2';
+import EsqueceuSenha from './src/Screens/Senha';
+import VerificarCodigo from './src/Screens/VerificarCodigo';
+import RedefinirSenha from './src/Screens/RedefinirSenha';
+
 
 
 
@@ -100,6 +104,15 @@ export default function App() {
         />
         <Drawer.Screen name="FaleConosco" component={FaleConosco} />
         <Drawer.Screen name="EditarPerfil" component={EditarPerfil} options={{
+          drawerItemStyle: { display: 'none' }
+        }} />
+        <Drawer.Screen name="EsqueceuSenha" component={EsqueceuSenha} options={{
+          drawerItemStyle: { display: 'none' }
+        }} />
+        <Drawer.Screen name="VerificarCodigo" component={VerificarCodigo} options={{
+          drawerItemStyle: { display: 'none' }
+        }} />
+        <Drawer.Screen name="RedefinirSenha" component={RedefinirSenha} options={{
           drawerItemStyle: { display: 'none' }
         }} />
       </Drawer.Navigator>

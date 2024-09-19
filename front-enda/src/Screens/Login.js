@@ -69,6 +69,10 @@ export default function Login() {
     navigation.navigate('Cadastro');
   };
 
+  const irParaSenha = () => {
+    navigation.navigate('EsqueceuSenha');
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
       <View style={styles.container}>
@@ -119,14 +123,24 @@ export default function Login() {
             texcolor={"white"}
             acao={verificarLogin}
             width={width * 0.8 * 0.5}
-            margin={30}
+            margin={20}
+            padding={10}
           />
           <Texto
             acao={irParaCadastro}
-            msg={`Ainda não possui uma\nconta? Cadastre-se`}
+            msg={`Cadastre-se`}
             tamanho={15}
             margin={0}
             cor={"#000000"}
+          />
+             <Texto
+            acao={irParaSenha}
+            msg={`Esqueçeu Senha!`}
+            tamanho={15}
+            margin={10}
+            padding={20}
+            cor={"#000000"}
+            alinhamento={"center"}
           />
         </View>
       </View>
@@ -137,6 +151,8 @@ export default function Login() {
 const styles = StyleSheet.create({
   scrollContainer: {
     flexGrow: 1,
+    height: height * 1,
+    width: width * 1
   },
   container: {
     flex: 1,
@@ -146,7 +162,7 @@ const styles = StyleSheet.create({
   },
   container_2: {
     backgroundColor: '#73D2C0',
-    width: '100%',
+    width: width,
     alignItems: 'center',
     paddingVertical: 100,
     borderTopLeftRadius: 45,

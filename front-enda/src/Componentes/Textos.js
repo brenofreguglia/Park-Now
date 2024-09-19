@@ -62,11 +62,11 @@ const TextoInput = ({
   );
 };
 
-const Texto = ({ msg, tamanho = 16, cor = '#000', margin = 0, acao, marginR = 0 , alinhamento}) => {
+const Texto = ({ msg, tamanho = 16, cor = '#000', margin = 0, acao, marginR = 0 , alinhamento, padding}) => {
   return (
     <Text
       onPress={acao}
-      style={[styles.texto, { fontSize: tamanho, color: cor, margin: margin, marginRight: marginR, alignItems: alinhamento }]}
+      style={[styles.texto, { fontSize: tamanho, color: cor, margin: margin, marginRight: marginR, alignItems: alinhamento, padding: padding}]}
     >
       {msg}
     </Text>
