@@ -266,11 +266,69 @@ const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
         user: 'parknowempresa@gmail.com',
-        pass: 'hcrw eiqv oxhj mgvn', // Certifique-se de usar a senha correta
+        pass: 'fzks veoo vles cepr', // Certifique-se de usar a senha correta
     },
     secure: true, // Use SSL
     port: 465,    // Porta para SSL
     timeout: 10000, // Aumente o timeout para 10 segundos
+});
+
+app.post('/send-email', (req, res) => {
+    // Logs para depuração
+    console.log('Dados recebidos:', req.body);
+  
+    const { subject, text, clienteEmail } = req.body;
+  
+    if (!subject || !text || !clienteEmail) {
+      return res.status(400).send('Todos os campos são obrigatórios.');
+    }
+
+    // Supondo que a sessão contenha o clienteId após o login
+    const clienteId = req.session.clienteId; 
+
+    if (!clienteId) {
+      return res.status(401).send('Cliente não autenticado.');
+    }
+  
+    // Consulta SQL para buscar o nome do cliente no banco de dados usando o ID do cliente
+    const query = 'SELECT nome FROM cadastro WHERE id = ?';
+  
+    console.log('Consultando banco de dados com clienteId:', clienteId);
+  
+    db.query(query, [clienteId], (err, results) => {
+      if (err) {
+        console.error('Erro ao buscar dados do cliente:', err);
+        return res.status(500).send('Erro ao buscar dados do cliente.');
+      }
+  
+      // Se o cliente não for encontrado
+      if (results.length === 0) {
+        return res.status(404).send('Cliente não encontrado.');
+      }
+  
+      const senderName = results[0].nome;
+  
+      // Configuração do e-mail
+      const mailOptions = {
+        from: clienteEmail, // Remetente fornecido pelo cliente
+        to: empresaEmail, // Destinatário fixo (empresa)
+        replyTo: clienteEmail, // Endereço do cliente para resposta
+        subject,
+        text: `Mensagem de ${senderName} (${clienteEmail}):\n\n${text}` // Incluindo o nome e e-mail do cliente no corpo do e-mail
+      };
+  
+      console.log('Configuração do e-mail:', mailOptions);
+  
+      // Envio do e-mail
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.error('Erro ao enviar o e-mail:', error);
+          return res.status(500).send('Erro ao enviar o e-mail.');
+        }
+        console.log('E-mail enviado:', info.response);
+        res.status(200).send('E-mail enviado com sucesso!');
+      });
+    });
 });
 
 // Rota para solicitar redefinição de senha
