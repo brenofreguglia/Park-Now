@@ -5,22 +5,19 @@ import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Texto } from '../Componentes/Textos';
 
-const screenHeight = Dimensions.get('screen').height;
+const { height, width } = Dimensions.get('window'); // Obter altura e largura da tela
 
 export default function Perfil({ handleLogout }) {
-  const [userName, setUserName] = useState(''); // Estado para armazenar o nome do usuário
-  // const [userId, setuserId] = useState(''); // Estado para armazenar o nome do usuário
+  const [userName, setUserName] = useState('');
 
   const navigation = useNavigation();
 
   useEffect(() => {
     const fetchUserName = async () => {
       try {
-        const nome = await AsyncStorage.getItem('userName'); // Assumindo que o nome do usuário está armazenado como 'userName'
-        // const id = await AsyncStorage.getItem('userId'); // Assumindo que o nome do usuário está armazenado como 'userName'
+        const nome = await AsyncStorage.getItem('userName');
         if (nome) {
           setUserName(nome);
-          // setuserId(id);
         } else {
           console.error('Nome do usuário não encontrado');
         }
@@ -78,12 +75,11 @@ export default function Perfil({ handleLogout }) {
           <MaterialIcons name="arrow-back" size={24} color="black" />
         </TouchableOpacity>
         <Image
-          source={{ uri: 'https://via.placeholder.com/150' }}
+          source={require("../../assets/Imgs/Avatar.png")}
           style={styles.image}
         />
         <View style={styles.profileDetails}>
-          {/* <Text style={styles.profileName}>{userName}</Text> Exibe o nome do usuário */}
-          <Texto cor={"#fff"} tamanho={24} marginR={10} msg={userName}/> 
+          <Texto cor={"#000000"} tamanho={24} marginR={10} msg={userName}/> 
           <TouchableOpacity style={styles.editButton} onPress={handleEditPress}>
             <Text style={styles.editButtonText}>Editar</Text>
           </TouchableOpacity>
@@ -113,20 +109,20 @@ const styles = StyleSheet.create({
     backgroundColor: '#73D2C0',
     width: '100%',
     alignItems: 'center',
-    paddingVertical: 20,
+    paddingVertical: height * 0.05, // 5% da altura da tela
     position: 'absolute',
     top: 0,
-    paddingTop: 40,
+    paddingTop: height * 0.05 + 20, // 5% + espaço extra
   },
   backButton: {
     position: 'absolute',
-    left: 20,
-    top: 40,
+    left: width * 0.05, // 5% da largura da tela
+    top: height * 0.05, // 5% da altura da tela
   },
   image: {
-    height: 150,
-    width: 150,
-    borderRadius: 75,
+    height: width * 0.35, // 35% da largura da tela
+    width: width * 0.35, // 35% da largura da tela
+    borderRadius: (width * 0.35) / 2, // Metade da largura para criar um círculo
     margin: 20,
     resizeMode: 'cover',
   },
@@ -134,44 +130,38 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  // profileName: {
-  //   fontSize: 24,
-  //   fontWeight: 'bold',
-  //   color: '#fff',
-  //   marginRight: 10,
-  // },
   editButton: {
     paddingHorizontal: 20,
     paddingVertical: 10,
-    backgroundColor: '#0097A7',
+    backgroundColor: '#D2F0EE',
     borderRadius: 20,
   },
   editButtonText: {
-    color: '#ffffff',
+    color: '#060606',
     fontWeight: 'bold',
   },
   logoutButton: {
     paddingHorizontal: 20,
     paddingVertical: 10,
-    backgroundColor: '#d9534f',
+    backgroundColor: '#D2F0EE',
     borderRadius: 20,
     position: 'absolute',
-    right: 20,
-    top: 40,
+    right: width * 0.05, // 5% da largura da tela
+    top: height * 0.05, // 5% da altura da tela
   },
   logoutButtonText: {
-    color: '#ffffff',
+    color: '#000000',
     fontWeight: 'bold',
   },
   card: {
-    backgroundColor: '#D2F0EE',
+    backgroundColor: '#ffffff',
     width: '100%',
-    height: screenHeight - 300,
+    height: height * 1, 
     position: 'absolute',
-    top: 320,
+    top: height * 0.4, 
     borderTopLeftRadius: 45,
     borderTopRightRadius: 45,
-    shadowColor: '#000',
+    shadowColor: '#000000',
     shadowOffset: { width: 0, height: -5 },
     shadowOpacity: 0.1,
     shadowRadius: 10,

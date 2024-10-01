@@ -13,7 +13,7 @@ const EsqueceuSenha = ({ navigation }) => {
     useEffect(() => {
         Animated.timing(fadeAnim, {
             toValue: 1,
-            duration: 2000,
+            duration: 1000,
             useNativeDriver: true,
         }).start();
     }, []);
@@ -61,11 +61,11 @@ const EsqueceuSenha = ({ navigation }) => {
 
     const borderColorInterpolated = borderColor.interpolate({
         inputRange: [0, 1],
-        outputRange: ['#ccc', '#0088CC'],
+        outputRange: ['#ffffff', '#000000'],
     });
 
     return (
-        <Animated.View style={[styles.container, { opacity: fadeAnim }]}>
+        <Animated.View View style={[styles.container, { opacity: fadeAnim }]}>
             <Image style={styles.logo} source={require('../../assets/Imgs/imagem.png')} />
             <Text style={styles.title}>Recuperar Senha</Text>
             <View style={styles.inputContainer}>
@@ -94,7 +94,7 @@ const EsqueceuSenha = ({ navigation }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#FFF',
+        backgroundColor: '#D2F0EE',
         justifyContent: 'center',
         alignItems: 'center',
         padding: 20,
@@ -124,15 +124,16 @@ const styles = StyleSheet.create({
         color: '#000',
     },
     button: {
-        backgroundColor: '#0088CC',
+        backgroundColor: '#000000',
         width: '90%',
         paddingVertical: 12,
         alignItems: 'center',
         marginTop: 5,
         marginBottom: 10,
+        borderRadius: 45,
     },
     buttonText: {
-        color: '#FFF',
+        color: '#ffffff',
         fontSize: 16,
         fontWeight: 'bold',
     },

@@ -9,12 +9,12 @@ import Toast from 'react-native-toast-message';
 
 import FaleConosco from "./src/Screens/FaleConosco";
 import Cadastro from "./src/Screens/Cadastro";
-import Estacionamento from './src/Screens/Estacionamento';
 import Perfil from './src/Screens/Perfil';
 import Login from './src/Screens/Login';
 import Menu from './src/Screens/Menu';
 import EditarPerfil from './src/Screens/EditarPerfil';
 import SplachScreen from './src/Screens/SplachScreen';
+import Estacionamento from './src/Screens/Estacionamento';
 import Estacionamento2 from './src/Screens/Estacionamento2';
 import EsqueceuSenha from './src/Screens/Senha';
 import VerificarCodigo from './src/Screens/VerificarCodigo';

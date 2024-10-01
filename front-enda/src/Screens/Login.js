@@ -10,7 +10,7 @@ const rota = "http://10.111.9.16:3000";
 
 export default function Login() {
   const navigation = useNavigation();
-  const [login, setLogin] = useState('teste@gmail.com');
+  const [login, setLogin] = useState('freguglia.breno@gmail.com');
   const [senha, setSenha] = useState('BHgf#123');
   const [error, setError] = useState('');
 

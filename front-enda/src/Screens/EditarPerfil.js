@@ -6,8 +6,8 @@ import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const rota = "http://10.111.9.16:3000";
-const screenHeight = Dimensions.get('screen').height;
-const screenWidth = Dimensions.get('screen').width
+const screenHeight = Dimensions.get('window').height; // Use 'window' para obter a área disponível sem status bar
+const screenWidth = Dimensions.get('window').width;
 
 export default function EditarPerfil() {
   const [name, setName] = useState('');
@@ -149,7 +149,7 @@ export default function EditarPerfil() {
 
       <View style={styles.profileHeader}>
         <TouchableOpacity onPress={pickImage}>
-          <Image source={profileImage ? { uri: profileImage } : require('../../assets/Imgs/carroMenu.jpg')} style={styles.image} />
+          <Image source={profileImage ? { uri: profileImage } : require('../../assets/Imgs/Avatar.png')} style={styles.image} />
         </TouchableOpacity>
       </View>
 
@@ -197,39 +197,39 @@ const styles = StyleSheet.create({
   backButton: {
     position: 'absolute',
     left: 20,
-    top: 40,
+    top: screenHeight * 0.05, // Ajustado com base na altura da tela
     zIndex: 1,
   },
   profileHeader: {
     backgroundColor: '#73D2C0',
     width: '100%',
     alignItems: 'center',
-    paddingVertical: 20,
+    paddingVertical: screenHeight * 0.02, // Ajustado com base na altura da tela
     position: 'absolute',
     top: 0,
-    paddingTop: 60, // Ajustado para mover a imagem mais para cima
+    paddingTop: screenHeight * 0.1, // Ajustado para mover a imagem mais para cima com base na altura da tela
   },
   image: {
-    width: 150,
-    height: 150,
-    borderRadius: 75,
+    width: screenWidth * 0.4, // 40% da largura da tela
+    height: screenWidth * 0.4, // Mantém a proporção 1:1
+    borderRadius: (screenWidth * 0.4) / 2, // Torna a imagem circular
     marginBottom: 10,
   },
   card: {
-    width: screenWidth,
+    width: screenWidth, 
     backgroundColor: 'white',
     borderTopLeftRadius: 45,
     borderTopRightRadius: 45,
-    marginTop: screenHeight * 0.30, // Ajustado para garantir que o botão não seja ocultado
+    marginTop: screenHeight * 0.325,
     padding: 25,
     elevation: 5,
-    flex: 1, // Adiciona flex para permitir o ajuste de tamanho do card
+    flex: 1, 
   },
   inputContainer: {
-    marginBottom: 15,
+    marginBottom: screenHeight * 0.02, // Ajuste do espaçamento entre inputs
   },
   label: {
-    fontSize: 16,
+    fontSize: screenWidth * 0.045, // Ajusta o tamanho da fonte com base na largura da tela
     fontWeight: 'bold',
   },
   inputWrapper: {
@@ -240,7 +240,7 @@ const styles = StyleSheet.create({
     flex: 1,
     borderWidth: 1,
     borderColor: '#ccc',
-    padding: 10,
+    padding: screenWidth * 0.03, // Ajusta o padding dos inputs com base na largura da tela
     borderRadius: 5,
   },
   eyeIcon: {
@@ -252,23 +252,23 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: 'red',
-    fontSize: 12,
+    fontSize: screenWidth * 0.03, // Ajusta o tamanho da fonte dos erros com base na largura da tela
     marginTop: 5,
   },
   saveButton: {
     backgroundColor: '#73D2C0',
-    padding: 15,
+    padding: screenHeight * 0.02, // Ajusta o padding do botão com base na altura da tela
     borderRadius: 10,
     alignItems: 'center',
-    marginTop: 20,
+    marginTop: screenHeight * 0.03, // Ajusta o espaçamento acima do botão com base na altura da tela
   },
   saveButtonText: {
     color: 'white',
-    fontSize: 16,
+    fontSize: screenWidth * 0.04, // Ajusta o tamanho da fonte do botão com base na largura da tela
     fontWeight: 'bold',
   },
   scrollContainer: {
-    flexGrow: 1, // Permite que o conteúdo do FlatList ocupe o espaço disponível
-    justifyContent: 'center', // Centraliza o conteúdo verticalmente
+    flexGrow: 1, 
+    justifyContent: 'center',
   },
 });
