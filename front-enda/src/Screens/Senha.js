@@ -13,7 +13,7 @@ const EsqueceuSenha = ({ navigation }) => {
     useEffect(() => {
         Animated.timing(fadeAnim, {
             toValue: 1,
-            duration: 1000,
+            duration: 0,
             useNativeDriver: true,
         }).start();
     }, []);
@@ -21,7 +21,7 @@ const EsqueceuSenha = ({ navigation }) => {
     useEffect(() => {
         Animated.timing(borderColor, {
             toValue: isFocused ? 1 : 0,
-            duration: 200,
+            duration: 0,
             useNativeDriver: false,
         }).start();
     }, [isFocused]);
@@ -66,7 +66,7 @@ const EsqueceuSenha = ({ navigation }) => {
 
     return (
         <Animated.View View style={[styles.container, { opacity: fadeAnim }]}>
-            <Image style={styles.logo} source={require('../../assets/Imgs/imagem.png')} />
+            <Image style={styles.logo} source={require('../../assets/Imgs/Avatar Home.png')} />
             <Text style={styles.title}>Recuperar Senha</Text>
             <View style={styles.inputContainer}>
                 <Animated.View style={[styles.inputWrapper, { borderColor: borderColorInterpolated }]}>

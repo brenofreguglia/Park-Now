@@ -268,6 +268,9 @@ const transporter = nodemailer.createTransport({
         user: 'parknowempresa@gmail.com',
         pass: 'hcrw eiqv oxhj mgvn', // Certifique-se de usar a senha correta
     },
+    secure: true, // Use SSL
+    port: 465,    // Porta para SSL
+    timeout: 10000, // Aumente o timeout para 10 segundos
 });
 
 // Rota para solicitar redefinição de senha
