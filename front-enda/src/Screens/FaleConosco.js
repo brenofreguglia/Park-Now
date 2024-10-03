@@ -42,7 +42,7 @@ const SendEmail = () => {
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.header}>
       <Text style={styles.faleTextTitle}>Fale Conosco</Text>
-      <Image source={require('./assets/img/oi.png')} style={styles.carIcon} />
+      {/* <Image source={require('./assets/img/oi.png')} style={styles.carIcon} /> */}
       </View>
 
       <View style={styles.form}>

@@ -52,13 +52,14 @@ CREATE TABLE IF NOT EXISTS `cadastro` (
   `verification_code` varchar(255) DEFAULT NULL,
   `verification_expires` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
--- Copiando dados para a tabela parknow.cadastro: ~2 rows (aproximadamente)
+-- Copiando dados para a tabela parknow.cadastro: ~4 rows (aproximadamente)
 INSERT INTO `cadastro` (`id`, `nome`, `sobrenome`, `cpf`, `endereco`, `cep`, `telefone`, `email`, `senha`, `reset_token`, `reset_token_expires`, `verification_code`, `verification_expires`) VALUES
-	(1, 'breno', 'freguglia', '46270934893', 'Rua Teste Bom', '19160000', '18998165080', 'freguglia.breno@gmail.com', 'a5eaa5e6cb269a776bf1a7f0c617b1ab3e5bc19a06a86df18ffd732803471970', NULL, NULL, '806047', '2024-09-19 15:01:11'),
+	(1, 'breno', 'freguglia', '46270934893', 'Rua Teste Bom', '19160000', '18998165080', 'freguglia.breno@gmail.com', 'a5eaa5e6cb269a776bf1a7f0c617b1ab3e5bc19a06a86df18ffd732803471970', NULL, NULL, '941619', '2024-10-03 14:30:39'),
 	(2, 'Samuel', 'Caliel', '46270934893', 'rua teste miçl', '19067755', '18998165080', 'samuelcaliel69@gmail.com', 'a5eaa5e6cb269a776bf1a7f0c617b1ab3e5bc19a06a86df18ffd732803471970', NULL, NULL, '386669', '2024-09-19 14:44:26'),
-	(3, 'Jorge', 'Gabriel', '46270934893', 'rua teste jorge', '19065755', '18998165080', 'jorgegabrielcdsantos@gmail.com', '36c6ee3db1019c0a9270ac2e0688809d28f48754e3007885e7ec096f2bbab194', NULL, NULL, '779836', '2024-09-19 14:47:51');
+	(3, 'Jorge', 'Gabriel', '46270934893', 'rua teste jorge', '19065755', '18998165080', 'jorgegabrielcdsantos@gmail.com', '36c6ee3db1019c0a9270ac2e0688809d28f48754e3007885e7ec096f2bbab194', NULL, NULL, '779836', '2024-09-19 14:47:51'),
+	(4, 'Park', 'Now', '46270934893', 'rua teste', '19063755', '18998165080', 'ParkNow@gmail.com', '4b1bbf296030151c43cb56140970a87f1832a3dd7b5d1e91014b43ab9ff07ecd', NULL, NULL, NULL, NULL);
 
 -- Copiando estrutura para tabela parknow.local
 CREATE TABLE IF NOT EXISTS `local` (
@@ -90,6 +91,23 @@ CREATE TABLE IF NOT EXISTS `tipo_automovel` (
 INSERT INTO `tipo_automovel` (`id_veiculo`, `tipo`) VALUES
 	(1, 'Carro'),
 	(2, 'Moto');
+
+-- Copiando estrutura para tabela parknow.vagas
+CREATE TABLE IF NOT EXISTS `vagas` (
+  `Id_Estacionamento` int(11) NOT NULL,
+  `Descricao` varchar(100) NOT NULL DEFAULT '',
+  `Status` char(1) DEFAULT NULL,
+  KEY `FK__local` (`Id_Estacionamento`),
+  CONSTRAINT `FK__local` FOREIGN KEY (`Id_Estacionamento`) REFERENCES `local` (`id_lugar`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+-- Copiando dados para a tabela parknow.vagas: ~5 rows (aproximadamente)
+INSERT INTO `vagas` (`Id_Estacionamento`, `Descricao`, `Status`) VALUES
+	(2, 'A1', NULL),
+	(2, 'a2', NULL),
+	(2, 'A3', 'o'),
+	(1, 'A1', NULL),
+	(1, 'A2', NULL);
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

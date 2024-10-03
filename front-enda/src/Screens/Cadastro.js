@@ -11,10 +11,10 @@ export default function Cadastro({}) {
   const navigation = useNavigation();
 
   const [form, setForm] = useState({
-    nome: '',
-    sobrenome: 'freguglia',
-    email: 'freguglia.breno@gmail.com',
-    senha: 'BHgf#123',
+    nome: 'Park',
+    sobrenome: 'Now',
+    email: 'ParkNow@gmail.com',
+    senha: 'Sesisenaisp914#',
     telefone: '18998165080',
     cpf: '46270934893',
     endereco: 'rua teste',
