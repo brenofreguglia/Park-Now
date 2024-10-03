@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, ScrollView, Text, Dimensions, Alert } from 'react-native';
+import { StyleSheet, View, ScrollView, Text, Dimensions, Alert, Image} from 'react-native';
 import { Button } from '../Componentes/Buttons';
 import { TextoInput } from '../Componentes/Textos'; // Atualize se houver outros componentes necessários
 import { useNavigation, useRoute } from '@react-navigation/native'; // Importa useRoute para acessar parâmetros da navegação
 
 const { width, height } = Dimensions.get('window');
-const rota = "http://10.111.9.16:3000";
+const rota = "http://192.168.192.172:3000";
 
 export default function RedefinirSenha() {
   const navigation = useNavigation();
@@ -65,6 +65,7 @@ export default function RedefinirSenha() {
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
       <View style={styles.container}>
+      <Image style={styles.logo} source={require('../../assets/Imgs/Avatar Home.png')} />
         <View style={styles.container_2}>
           <TextoInput
             color={"#D2F0EE"}
@@ -122,9 +123,10 @@ const styles = StyleSheet.create({
   },
   container_2: {
     backgroundColor: '#73D2C0',
-    width: width,
+    width: width ,
+    height: height *  0.65 ,
     alignItems: 'center',
-    paddingVertical: 100,
+    paddingVertical: "40%",
     borderTopLeftRadius: 45,
     borderTopRightRadius: 45,
     shadowColor: '#000',
@@ -135,4 +137,9 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     fontSize: 16,
   },
+  logo: {
+    height: 310,
+    width: 310,
+    marginBottom: 0,
+},
 });

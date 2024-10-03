@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { View, Image, TextInput, StyleSheet, Alert, Text, TouchableOpacity, Animated } from 'react-native';
+import { View, Image, TextInput, StyleSheet, Alert, Text, TouchableOpacity, Animated, Dimensions } from 'react-native';
 import axios from 'axios';
 
+const { width, height } = Dimensions.get('window');
+
 const EsqueceuSenha = ({ navigation }) => {
-    const rota = "http://10.111.9.16:3000"; // Certifique-se de que esta URL está correta
+    const rota = "http://192.168.192.172:3000"; // Certifique-se de que esta URL está correta
 
     const [email, setEmail] = useState('');
     const [isFocused, setIsFocused] = useState(false);
@@ -61,12 +63,13 @@ const EsqueceuSenha = ({ navigation }) => {
 
     const borderColorInterpolated = borderColor.interpolate({
         inputRange: [0, 1],
-        outputRange: ['#ffffff', '#000000'],
+        outputRange: ['#D2F0EE', '#D2F0EE'],
     });
 
     return (
         <Animated.View View style={[styles.container, { opacity: fadeAnim }]}>
             <Image style={styles.logo} source={require('../../assets/Imgs/Avatar Home.png')} />
+            <View  style={styles.container_2}>
             <Text style={styles.title}>Recuperar Senha</Text>
             <View style={styles.inputContainer}>
                 <Animated.View style={[styles.inputWrapper, { borderColor: borderColorInterpolated }]}>
@@ -77,7 +80,8 @@ const EsqueceuSenha = ({ navigation }) => {
                         onFocus={handleFocus}
                         onBlur={handleBlur}
                         placeholder="Email"
-                        placeholderTextColor="#aaa"
+                        placeholderTextColor="#000000"
+                        
                     />
                 </Animated.View>
             </View>
@@ -87,6 +91,7 @@ const EsqueceuSenha = ({ navigation }) => {
             <TouchableOpacity style={styles.linkButton} onPress={() => navigation.navigate('Login')}>
                 <Text style={styles.linkText}>Voltar para o Login</Text>
             </TouchableOpacity>
+            </View>
         </Animated.View>
     );
 };
@@ -97,17 +102,29 @@ const styles = StyleSheet.create({
         backgroundColor: '#D2F0EE',
         justifyContent: 'center',
         alignItems: 'center',
-        padding: 20,
+        height: height *  0.9,
+
     },
+    container_2: {
+        backgroundColor: '#73D2C0',
+        width: width ,
+        height: height *  0.65 ,
+        alignItems: 'center',
+        paddingVertical: "20%",
+        borderTopLeftRadius: 45,
+        borderTopRightRadius: 45,
+        shadowColor: '#000',
+      },
     logo: {
-        height: 110,
-        width: 110,
+        height: 150,
+        width: 150,
         marginBottom: 20,
+        marginTop: 350
     },
     title: {
         fontSize: 28,
         fontWeight: 'bold',
-        color: '#023047',
+        color: '#090909',
         marginBottom: 20,
     },
     inputContainer: {
@@ -116,12 +133,16 @@ const styles = StyleSheet.create({
     },
     inputWrapper: {
         borderWidth: 1,
+        borderRadius: 30,
     },
     input: {
-        width: '100%',
+        width: width * 0.8,
+        borderRadius:  30,
+        height: 60,
+        alignItems: "center",
         padding: 15,
         fontSize: 15,
-        color: '#000',
+        color: '#000000',
     },
     button: {
         backgroundColor: '#000000',

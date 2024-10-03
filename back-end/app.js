@@ -266,7 +266,7 @@ const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
         user: 'parknowempresa@gmail.com',
-        pass: 'fzks veoo vles cepr', // Certifique-se de usar a senha correta
+        pass: 'bvvt uwxl qbhj gcpt', // Certifique-se de usar a senha correta
     },
     secure: true, // Use SSL
     port: 465,    // Porta para SSL
