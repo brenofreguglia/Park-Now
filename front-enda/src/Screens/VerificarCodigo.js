@@ -76,7 +76,7 @@ const VerificarCodigo = ({ navigation, route }) => {
 
     return (
         <Animated.View style={[styles.container, { opacity: fadeAnim }]}>
-            <Image style={styles.logo} source={require('../../assets/Imgs/Avatar Home.png')} />
+            <Image style={styles.logo} source={require('../../assets/Imgs/Email.png')} />
             <View style={styles.container_2}>
 
             <Text style={styles.title}>Verificar Código</Text>

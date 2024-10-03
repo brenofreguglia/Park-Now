@@ -119,7 +119,7 @@ export default function Login() {
           />
 
           <Button
-            texto={` Login`}
+            texto={`Entrar`}
             texcolor={"white"}
             acao={verificarLogin}
             width={width * 0.8 * 0.5}

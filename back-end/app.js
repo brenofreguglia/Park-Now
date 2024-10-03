@@ -282,13 +282,9 @@ app.post('/send-email', (req, res) => {
     if (!subject || !text || !clienteEmail) {
       return res.status(400).send('Todos os campos são obrigatórios.');
     }
-
-    // Supondo que a sessão contenha o clienteId após o login
-    const clienteId = req.session.clienteId; 
-
-    if (!clienteId) {
-      return res.status(401).send('Cliente não autenticado.');
-    }
+  
+    // Aqui deve-se ter um identificador único do cliente (como clienteId ou o ID de login da sessão)
+    const clienteId = 1; // Este é um exemplo fixo. Pode vir de uma sessão ou de outro sistema.
   
     // Consulta SQL para buscar o nome do cliente no banco de dados usando o ID do cliente
     const query = 'SELECT nome FROM cadastro WHERE id = ?';
@@ -329,7 +325,7 @@ app.post('/send-email', (req, res) => {
         res.status(200).send('E-mail enviado com sucesso!');
       });
     });
-});
+  });
 
 // Rota para solicitar redefinição de senha
 app.post('/forgot-password', async (req, res) => {

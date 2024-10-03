@@ -12,13 +12,13 @@ export default function Cadastro({}) {
 
   const [form, setForm] = useState({
     nome: '',
-    sobrenome: '',
-    email: '',
-    senha: '',
-    telefone: '',
-    cpf: '',
-    endereco: '',
-    cep: ''
+    sobrenome: 'freguglia',
+    email: 'freguglia.breno@gmail.com',
+    senha: 'BHgf#123',
+    telefone: '18998165080',
+    cpf: '46270934893',
+    endereco: 'rua teste',
+    cep: '19063755'
   });
 
   const [errors, setErrors] = useState({});

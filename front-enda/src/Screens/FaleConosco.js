@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, Alert, StyleSheet, ActivityIndicator, ScrollView } from 'react-native';
+import { View, TextInput, Alert, StyleSheet, ActivityIndicator, ScrollView, Text, Image, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 
 const SendEmail = () => {
@@ -21,8 +21,9 @@ const SendEmail = () => {
     }
 
     setLoading(true);
+    // trocar ip 
     try {
-      const response = await axios.post('http://10.111.9.15:3000/send-email', {
+      const response = await axios.post('http://192.168.167.106:3000/send-email', {
         subject,
         text,
         clienteEmail: clientEmail // Enviando o e-mail do cliente
@@ -39,12 +40,18 @@ const SendEmail = () => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
+      <View style={styles.header}>
+      <Text style={styles.faleTextTitle}>Fale Conosco</Text>
+      <Image source={require('./assets/img/oi.png')} style={styles.carIcon} />
+      </View>
+
       <View style={styles.form}>
         <TextInput
           style={styles.input}
-          placeholder="Assunto"
+          placeholder="Erro, Falha ou Outro Assunto "
           value={subject}
           onChangeText={setSubject}
+          placeholderTextColor="#fff"
         />
         <TextInput
           style={styles.input}
@@ -53,6 +60,7 @@ const SendEmail = () => {
           onChangeText={setClientEmail}
           keyboardType="email-address" // Facilita a entrada de e-mail
           autoCapitalize="none" // Evita que o e-mail seja capitalizado
+          placeholderTextColor="#fff"
         />
         <TextInput
           style={[styles.input, styles.textArea]}
@@ -61,12 +69,15 @@ const SendEmail = () => {
           onChangeText={setText}
           multiline
           numberOfLines={4}
+          placeholderTextColor="#fff"
         />
-        <Button
-          title="Enviar E-mail"
-          onPress={handleSendEmail}
-        />
-        {loading && <ActivityIndicator size="large" color="#0000ff" style={styles.loader} />}
+
+        {/* Substitui o Button por TouchableOpacity para personalização */}
+        <TouchableOpacity style={styles.button} onPress={handleSendEmail}>
+          <Text style={styles.buttonText}>Enviar E-mail</Text>
+        </TouchableOpacity>
+
+        {loading && <ActivityIndicator size="large" color="#ffffff" style={styles.loader} />}
       </View>
     </ScrollView>
   );
@@ -75,36 +86,60 @@ const SendEmail = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-start', // Move o conteúdo para o topo
     padding: 16,
-    backgroundColor: '#f5f5f5'
+    backgroundColor: '#73D2C0', // Fundo do formulário verde menta
+  },
+  header: {
+    marginBottom: 100,
+    marginTop: 40, // Move a seção para mais perto do topo
+    alignItems: 'center', // Centraliza o texto "Fale Conosco"
+    flexDirection: 'row', // Exibe o texto e a imagem lado a lado
+    justifyContent: 'center', // Alinha o texto e imagem no centro
+  },
+  faleTextTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#000000', // Texto preto para contraste
+    marginLeft: 10, // Espaço entre o ícone do carro e o texto
+  },
+  carIcon: {
+    width: 80, // Largura do ícone do carro
+    height: 80, // Altura do ícone do carro
+    
   },
   form: {
-    backgroundColor: '#fff',
+    backgroundColor: '#73D2C0', // Cor de fundo do formulário
     padding: 16,
-    borderRadius: 8,
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8
   },
   input: {
     height: 50,
-    borderColor: '#ddd',
+    borderColor: '#fff', // Borda branca
     borderWidth: 1,
     borderRadius: 8,
     paddingHorizontal: 12,
     marginBottom: 12,
-    backgroundColor: '#fff'
+    backgroundColor: 'transparent', // Fundo transparente para dar contraste ao placeholder
+    color: '#fff', // Texto branco
   },
   textArea: {
     height: 100,
-    textAlignVertical: 'top'
+    textAlignVertical: 'top',
+  },
+  button: {
+    backgroundColor: '#488378', // Cor do botão
+    padding: 12,
+    borderRadius: 8,
+    alignItems: 'center', // Centraliza o texto do botão
+  },
+  buttonText: {
+    color: '#fff', // Cor do texto do botão
+    fontSize: 16,
+    fontWeight: 'bold',
   },
   loader: {
-    marginTop: 16
-  }
+    marginTop: 16,
+  },
 });
 
 export default SendEmail;

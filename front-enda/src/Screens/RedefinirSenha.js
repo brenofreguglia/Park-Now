@@ -65,7 +65,7 @@ export default function RedefinirSenha() {
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
       <View style={styles.container}>
-      <Image style={styles.logo} source={require('../../assets/Imgs/Avatar Home.png')} />
+      <Image style={styles.logo} source={require('../../assets/Imgs/Crip.png')} />
         <View style={styles.container_2}>
           <TextoInput
             color={"#D2F0EE"}
