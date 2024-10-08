@@ -67,9 +67,9 @@ export default function App() {
   
   return (
     <NavigationContainer>
-      <Drawer.Navigator screenOptions={{ headerShown: false }}>
+      <Drawer.Navigator screenOptions={{ headerShown: false }} >
 
-        <Drawer.Screen name="SplashScreen" component={SplachScreen} />
+        <Drawer.Screen name="SplashScreen" component={SplachScreen} options={{ drawerItemStyle: { display: 'none' }}} />
 
         <Drawer.Screen
           name="Menu"
@@ -102,7 +102,7 @@ export default function App() {
           component={Cadastro}
           options={{ headerShown: false, drawerItemStyle: { display: 'none' } }}
         />
-        <Drawer.Screen name="FaleConosco" component={FaleConosco} />
+        <Drawer.Screen name="Fale Conosco" component={FaleConosco} />
         <Drawer.Screen name="EditarPerfil" component={EditarPerfil} options={{
           drawerItemStyle: { display: 'none' }
         }} />

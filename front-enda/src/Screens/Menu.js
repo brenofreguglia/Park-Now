@@ -2,15 +2,15 @@ import React, { useEffect, useState, useRef } from 'react';
 import { StyleSheet, View, Image, ScrollView, TextInput, TouchableOpacity, Alert, Text } from "react-native";
 import { Button } from "../Componentes/Buttons";
 import { Texto, TextoInput } from "../Componentes/Textos";
-import { useRoute, useNavigation } from "@react-navigation/native"; // Adicionado useNavigation
+import { useRoute, useNavigation } from "@react-navigation/native";
 import MapView, { Marker } from 'react-native-maps';
 import Toast from 'react-native-toast-message';
-import * as Location from 'expo-location'; // Importando Location
+import * as Location from 'expo-location';
 
 export default function Menu() {
   const route = useRoute();
-  const { user } = route.params || {}; // Desestruturação segura com valor padrão
-  const navigation = useNavigation(); // Hook de navegação
+  const { user } = route.params || {};
+  const navigation = useNavigation();
 
   const [search, setSearch] = useState('');
   const [region, setRegion] = useState({
@@ -20,7 +20,7 @@ export default function Menu() {
     longitudeDelta: 0.0421,
   });
   const [markerLocation, setMarkerLocation] = useState(null);
-  const mapRef = useRef(null); // Referência para o MapView
+  const mapRef = useRef(null);
 
   useEffect(() => {
     if (user) {
@@ -81,7 +81,6 @@ export default function Menu() {
     }
   };
 
-  // Funções para navegação
   const navigateToEstacionamentoCarro = () => {
     navigation.navigate('Estacionamento', { vehicleType: 'carro' });
   };
@@ -92,7 +91,6 @@ export default function Menu() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      {/* VIEW DO INPUT */}
       <View style={styles.searchContainer}>
         <TextInput 
           style={styles.searchInput}
@@ -105,7 +103,6 @@ export default function Menu() {
         </TouchableOpacity>
       </View>
 
-      {/* VIEW DA GEOLOCALIZACAO */}
       <View style={styles.container_geo}>
         <MapView
           ref={mapRef}
@@ -129,14 +126,12 @@ export default function Menu() {
       />
 
       <View style={styles.vehiclesContainer}>
-        {/* VIEW CARRO */}
         <View style={styles.vehicle}>
           <Image source={require("../../assets/Imgs/carroMenu.jpg")} style={styles.vehicleImage} />
           <Texto msg={"CARRO"} tamanho={16} />
           <Button width={120} borda={30} height={50} color={"#73D2C0"} texto={">>>"} acao={navigateToEstacionamentoCarro}/>
         </View>
-        
-        {/* VIEW MOTO */}
+
         <View style={styles.vehicle}>
           <Image source={require("../../assets/Imgs/motoMenu.jpg")} style={styles.vehicleImage} />
           <Texto msg={"MOTO"} tamanho={16} />

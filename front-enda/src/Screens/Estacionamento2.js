@@ -52,7 +52,7 @@ const Estacionamento2 = () => {
         <TouchableOpacity onPress={() => navigation.navigate("Menu")}>
           <AntDesign name="arrowleft" size={24} color="black" />
         </TouchableOpacity>
-        <Text style={styles.title}>SELECIONE A VAGA</Text>
+        <Text style={styles.title}>SELECIONE A VAGA 2</Text>
       </View>
 
       <View style={styles.parkingGrid}>

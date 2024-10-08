@@ -1,12 +1,24 @@
 import React, { useState } from 'react';
-import { View, TextInput, Alert, StyleSheet, ActivityIndicator, ScrollView, Text, Image, TouchableOpacity } from 'react-native';
+import { View, TextInput, Alert, StyleSheet, ActivityIndicator, ScrollView, Dimensions, Text, Image, TouchableOpacity } from 'react-native';
 import axios from 'axios';
+import { MaterialIcons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native'; 
+
+const rota = "http://192.168.192.172:3000"
+// const rota = "http://10.111.9.20:3000"
+
+const { height, width } = Dimensions.get('window'); // Obter altura e largura da tela
 
 const SendEmail = () => {
+  const navigation = useNavigation();  // Move useNavigation para dentro do componente
   const [subject, setSubject] = useState(''); // Assunto do e-mail
   const [text, setText] = useState(''); // Corpo da mensagem
   const [clientEmail, setClientEmail] = useState(''); // E-mail do cliente
   const [loading, setLoading] = useState(false);
+
+  const VoltarTela = () => {
+    navigation.navigate("Menu");
+  };
 
   const handleSendEmail = async () => {
     // Validação do e-mail do cliente
@@ -21,9 +33,8 @@ const SendEmail = () => {
     }
 
     setLoading(true);
-    // trocar ip 
     try {
-      const response = await axios.post('http://192.168.167.106:3000/send-email', {
+      const response = await axios.post(`${rota}/send-email`, { // mudar conforme o ip da máquina
         subject,
         text,
         clienteEmail: clientEmail // Enviando o e-mail do cliente
@@ -41,8 +52,14 @@ const SendEmail = () => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.header}>
-      <Text style={styles.faleTextTitle}>Fale Conosco</Text>
-      {/* <Image source={require('./assets/img/oi.png')} style={styles.carIcon} /> */}
+        <TouchableOpacity style={styles.backButton} onPress={VoltarTela}>
+          <MaterialIcons name="arrow-back" size={24} color="black" />
+        </TouchableOpacity>
+        <Text style={styles.faleTextTitle}>Fale Conosco</Text>
+      </View>
+
+      <View style={styles.imageContainer}>
+        <Image source={require('../../assets/Imgs/oi.png')} style={styles.carIcon} />
       </View>
 
       <View style={styles.form}>
@@ -51,7 +68,7 @@ const SendEmail = () => {
           placeholder="Erro, Falha ou Outro Assunto "
           value={subject}
           onChangeText={setSubject}
-          placeholderTextColor="#fff"
+          placeholderTextColor="#000000"
         />
         <TextInput
           style={styles.input}
@@ -60,7 +77,7 @@ const SendEmail = () => {
           onChangeText={setClientEmail}
           keyboardType="email-address" // Facilita a entrada de e-mail
           autoCapitalize="none" // Evita que o e-mail seja capitalizado
-          placeholderTextColor="#fff"
+          placeholderTextColor="#000000"
         />
         <TextInput
           style={[styles.input, styles.textArea]}
@@ -69,10 +86,9 @@ const SendEmail = () => {
           onChangeText={setText}
           multiline
           numberOfLines={4}
-          placeholderTextColor="#fff"
+          placeholderTextColor="#000000"
         />
 
-        {/* Substitui o Button por TouchableOpacity para personalização */}
         <TouchableOpacity style={styles.button} onPress={handleSendEmail}>
           <Text style={styles.buttonText}>Enviar E-mail</Text>
         </TouchableOpacity>
@@ -87,30 +103,40 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'flex-start', // Move o conteúdo para o topo
-    padding: 16,
-    backgroundColor: '#73D2C0', // Fundo do formulário verde menta
+    backgroundColor: '#d2f0ee', // Fundo do formulário verde menta
   },
   header: {
-    marginBottom: 100,
+    marginBottom: 20,
     marginTop: 40, // Move a seção para mais perto do topo
-    alignItems: 'center', // Centraliza o texto "Fale Conosco"
-    flexDirection: 'row', // Exibe o texto e a imagem lado a lado
-    justifyContent: 'center', // Alinha o texto e imagem no centro
+    alignItems: 'center',
   },
   faleTextTitle: {
     fontSize: 24,
     fontWeight: 'bold',
     color: '#000000', // Texto preto para contraste
-    marginLeft: 10, // Espaço entre o ícone do carro e o texto
+    marginTop: 10,
+  },
+  backButton: {
+    position: 'absolute',
+    left: width * 0.05, // 5% da largura da tela
+    top: height * 0.02, // 2% da altura da tela
+  },
+  imageContainer: {
+    alignItems: 'center', // Centraliza a imagem horizontalmente
+    justifyContent: 'center', // Centraliza a imagem verticalmente
+    marginBottom: 40, // Espaço entre a imagem e o formulário
   },
   carIcon: {
-    width: 80, // Largura do ícone do carro
-    height: 80, // Altura do ícone do carro
-    
+    width: 220, // Largura do ícone da imagem
+    height: 220, // Altura do ícone da imagem
+    resizeMode: 'contain', // Redimensiona a imagem sem distorcer
   },
   form: {
     backgroundColor: '#73D2C0', // Cor de fundo do formulário
-    padding: 16,
+    padding: 25,
+    width: "100%",
+    height: "100%",
+    borderRadius: 50,
   },
   input: {
     height: 50,
@@ -119,15 +145,15 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingHorizontal: 12,
     marginBottom: 12,
-    backgroundColor: 'transparent', // Fundo transparente para dar contraste ao placeholder
-    color: '#fff', // Texto branco
+    backgroundColor: "#d2f0ee", // Fundo transparente para dar contraste ao placeholder
+    color: '#000000', // Texto preto
   },
   textArea: {
     height: 100,
     textAlignVertical: 'top',
   },
   button: {
-    backgroundColor: '#488378', // Cor do botão
+    backgroundColor: '#000000', // Cor do botão
     padding: 12,
     borderRadius: 8,
     alignItems: 'center', // Centraliza o texto do botão
