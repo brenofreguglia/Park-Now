@@ -47,8 +47,6 @@ CREATE TABLE IF NOT EXISTS `cadastro` (
   `telefone` varchar(15) NOT NULL,
   `email` varchar(250) NOT NULL,
   `senha` varchar(255) NOT NULL,
-  `reset_token` varchar(255) DEFAULT NULL,
-  `reset_token_expires` datetime DEFAULT NULL,
   `verification_code` varchar(255) DEFAULT NULL,
   `verification_expires` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -56,14 +54,14 @@ CREATE TABLE IF NOT EXISTS `cadastro` (
 
 -- Copiando dados para a tabela parknow.cadastro: ~4 rows (aproximadamente)
 INSERT INTO `cadastro` (`id`, `nome`, `sobrenome`, `cpf`, `endereco`, `cep`, `telefone`, `email`, `senha`, `reset_token`, `reset_token_expires`, `verification_code`, `verification_expires`) VALUES
-	(1, 'breno', 'freguglia', '46270934893', 'Rua Teste Bom', '19160000', '18998165080', 'freguglia.breno@gmail.com', 'a5eaa5e6cb269a776bf1a7f0c617b1ab3e5bc19a06a86df18ffd732803471970', NULL, NULL, '941619', '2024-10-03 14:30:39'),
-	(2, 'Samuel', 'Caliel', '46270934893', 'rua teste miçl', '19067755', '18998165080', 'samuelcaliel69@gmail.com', 'a5eaa5e6cb269a776bf1a7f0c617b1ab3e5bc19a06a86df18ffd732803471970', NULL, NULL, '386669', '2024-09-19 14:44:26'),
-	(3, 'Jorge', 'Gabriel', '46270934893', 'rua teste jorge', '19065755', '18998165080', 'jorgegabrielcdsantos@gmail.com', '36c6ee3db1019c0a9270ac2e0688809d28f48754e3007885e7ec096f2bbab194', NULL, NULL, '779836', '2024-09-19 14:47:51'),
-	(4, 'Park', 'Now', '46270934893', 'rua teste', '19063755', '18998165080', 'ParkNow@gmail.com', '4b1bbf296030151c43cb56140970a87f1832a3dd7b5d1e91014b43ab9ff07ecd', NULL, NULL, NULL, NULL);
+	(1, 'breno', 'freguglia', '46270934893', 'Rua Teste Bom', '19160000', '18998165080', 'freguglia.breno@gmail.com', 'a5eaa5e6cb269a776bf1a7f0c617b1ab3e5bc19a06a86df18ffd732803471970', '941619', '2024-10-03 14:30:39'),
+	(2, 'Samuel', 'Caliel', '46270934893', 'rua teste miçl', '19067755', '18998165080', 'samuelcaliel69@gmail.com', 'a5eaa5e6cb269a776bf1a7f0c617b1ab3e5bc19a06a86df18ffd732803471970', '386669', '2024-09-19 14:44:26'),
+	(3, 'Jorge', 'Gabriel', '46270934893', 'rua teste jorge', '19065755', '18998165080', 'jorgegabrielcdsantos@gmail.com', '36c6ee3db1019c0a9270ac2e0688809d28f48754e3007885e7ec096f2bbab194', '779836', '2024-09-19 14:47:51'),
+	(4, 'Park', 'Now', '46270934893', 'rua teste', '19063755', '18998165080', 'ParkNow@gmail.com', '4b1bbf296030151c43cb56140970a87f1832a3dd7b5d1e91014b43ab9ff07ecd', NULL, NULL);
 
 -- Copiando estrutura para tabela parknow.local
 CREATE TABLE IF NOT EXISTS `local` (
-  `id_lugar` int(11) NOT NULL AUTO_INCREMENT,
+  `id_lugar` int(11) NOT NULL AUTO_INCREMENT,SELECT * FROM cadastro WHERE verification_code IS NULL
   `nome` varchar(100) DEFAULT NULL,
   `cidade` varchar(100) DEFAULT NULL,
   `endereco` varchar(255) DEFAULT NULL,
