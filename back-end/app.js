@@ -430,6 +430,21 @@ app.post('/reset-password', async (req, res) => {
 });
 
 
+// Express route to get parking spots
+app.get('/vagas', async (req, res) => {
+    const query = 'SELECT v.Id_Estacionamento, l.latitude, l.longitude FROM vagas v JOIN local l ON v.Id_Estacionamento = l.id_lugar';
+    
+    try {
+      const vagas = await db.query(query);
+      res.status(200).json(vagas);
+    } catch (err) {
+      res.status(500).json({ error: 'Erro ao buscar vagas' });
+    }
+  });
+  
+
+
+
 
 // // Rota para obter a quantidade de vagas de um local específico
 // app.get('/local/:id/vagas', (req, res) => {

@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { StyleSheet, View, Image, FlatList, Dimensions, Text } from "react-native";
+import { StyleSheet, View, Image, FlatList, Dimensions, Text, TouchableOpacity } from "react-native";
 import { Button } from "../Componentes/Buttons";
 import { Texto, TextoInput } from "../Componentes/Textos";
 import { useNavigation } from "@react-navigation/native";
+import { Ionicons } from '@expo/vector-icons'; // Importação para os ícones
 
 const { width, height } = Dimensions.get("window");
-const rota = "http://10.111.9.20"
+const rota = "http://10.111.9.26"
 
 export default function Cadastro({}) {
   const navigation = useNavigation();
@@ -22,6 +23,11 @@ export default function Cadastro({}) {
   });
 
   const [errors, setErrors] = useState({});
+  const [senhaVisivel, setSenhaVisivel] = useState(false); // Estado para controlar a visibilidade da senha
+
+  const toggleSenhaVisivel = () => {
+    setSenhaVisivel(!senhaVisivel); // Alterna a visibilidade
+  };
 
   const validateFields = () => {
     const newErrors = {};
@@ -100,18 +106,39 @@ export default function Cadastro({}) {
         renderItem={({ item }) => (
           <View style={styles.inputContainer}>
             <Texto msg={item.label} cor={"#000000"} tamanho={20} margin={0} />
-            <TextoInput
-              tamanho={20}
-              width={330}
-              borda={25}
-              height={45}
-              lugar={"left"}
-              margin={3}
-              cor={"#ffffff"}
-              color={"#ffffff7c"}
-              value={item.value}
-              descricao={(text) => handleInputChange(item.key, text)}
-            />
+            
+            {item.key === 'senha' ? (
+              <View style={styles.passwordContainer}>
+                <TextoInput
+                  tamanho={20}
+                  width={330}
+                  borda={25}
+                  height={45}
+                  lugar={"left"}
+                  margin={3}
+                  cor={"#ffffff"}
+                  color={"#ffffff7c"}
+                  secureTextEntry={!senhaVisivel} // Utilizando seu componente TextoInput
+                  value={item.value}
+                  descricao={(text) => handleInputChange(item.key, text)}
+                  placeholder={item.placeholder}
+                />
+              </View>              
+            ) : (
+              <TextoInput
+                tamanho={20}
+                width={330}
+                borda={25}
+                height={45}
+                lugar={"left"}
+                margin={3}
+                cor={"#ffffff"}
+                color={"#ffffff7c"}
+                value={item.value}
+                descricao={(text) => handleInputChange(item.key, text)}
+                placeholder={item.placeholder}
+              />
+            )}
             {item.error && <Text style={styles.errorText}>{item.error}</Text>}
           </View>
         )}
@@ -171,6 +198,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     marginBottom: 10,
   },
+
   errorText: {
     color: '#000000',
     marginTop: 5,

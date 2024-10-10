@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { StyleSheet, View, Image, ScrollView, TextInput, TouchableOpacity, Alert, Text } from "react-native";
+import { StyleSheet, View, Image, ScrollView, TextInput, TouchableOpacity, Alert, Text, Linking } from "react-native";
 import { Button } from "../Componentes/Buttons";
-import { Texto, TextoInput } from "../Componentes/Textos";
+import { Texto } from "../Componentes/Textos";
 import { useRoute, useNavigation } from "@react-navigation/native";
 import MapView, { Marker } from 'react-native-maps';
 import Toast from 'react-native-toast-message';
@@ -12,6 +12,12 @@ export default function Menu() {
   const { user } = route.params || {};
   const navigation = useNavigation();
 
+  const locais = [
+    { id: 1, latitude: -22.13151, longitude: -51.39025, title: 'Estacionamento 1' },
+    { id: 2, latitude: -22.1200, longitude: -51.3850, title: 'Estacionamento 2' },
+    { id: 3, latitude: -22.1250, longitude: -51.3800, title: 'Local 3' },
+  ];
+
   const [search, setSearch] = useState('');
   const [region, setRegion] = useState({
     latitude: -22.121265,
@@ -20,6 +26,7 @@ export default function Menu() {
     longitudeDelta: 0.0421,
   });
   const [markerLocation, setMarkerLocation] = useState(null);
+  const [origin, setOrigin] = useState(null);
   const mapRef = useRef(null);
 
   useEffect(() => {
@@ -48,6 +55,10 @@ export default function Menu() {
         longitude: location.coords.longitude,
       });
       setMarkerLocation({
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+      });
+      setOrigin({
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,
       });
@@ -81,12 +92,17 @@ export default function Menu() {
     }
   };
 
-  const navigateToEstacionamentoCarro = () => {
-    navigation.navigate('Estacionamento', { vehicleType: 'carro' });
-  };
-
-  const navigateToEstacionamentoMoto = () => {
-    navigation.navigate('Estacionamento', { vehicleType: 'moto' });
+  const openGoogleMaps = (local) => {
+    if (origin && local) {
+      const originLatLng = `${origin.latitude},${origin.longitude}`;
+      const destinationLatLng = `${local.latitude},${local.longitude}`;
+      const url = `https://www.google.com/maps/dir/?api=1&origin=${originLatLng}&destination=${destinationLatLng}`;
+      Linking.openURL(url).catch((err) => {
+        Alert.alert('Erro', 'Não foi possível abrir o Google Maps: ' + err.message);
+      });
+    } else {
+      Alert.alert('Erro', 'Defina um ponto de origem e um destino antes de tentar navegar.');
+    }
   };
 
   return (
@@ -108,12 +124,34 @@ export default function Menu() {
           ref={mapRef}
           style={styles.map}
           region={region}
+          showsUserLocation={true}
         >
+          {/* Marcadores dos locais */}
+          {locais.map((local) => (
+            <Marker
+              key={local.id}
+              coordinate={{ latitude: local.latitude, longitude: local.longitude }}
+              title={local.title}
+              onPress={() => openGoogleMaps(local)}  // Abre o Google Maps ao clicar no marcador
+            >
+              <Image
+                source={require('../../assets/Imgs/customMarker.png')}  // Imagem customizada do marcador
+                style={styles.markerImage}
+              />
+            </Marker>
+          ))}
+
+          {/* Marcador da localização pesquisada */}
           {markerLocation && (
             <Marker
               coordinate={markerLocation}
               title="Localização Pesquisada"
-            />
+            >
+              <Image
+                source={require('../../assets/Imgs/customMarker.png')}  // Imagem customizada para o marcador da localização
+                style={styles.markerImage}
+              />
+            </Marker>
           )}
         </MapView>
       </View>
@@ -129,13 +167,13 @@ export default function Menu() {
         <View style={styles.vehicle}>
           <Image source={require("../../assets/Imgs/carroMenu.jpg")} style={styles.vehicleImage} />
           <Texto msg={"CARRO"} tamanho={16} />
-          <Button width={120} borda={30} height={50} color={"#73D2C0"} texto={">>>"} acao={navigateToEstacionamentoCarro}/>
+          <Button width={120} borda={30} height={50} color={"#73D2C0"} texto={">>>"} acao={() => navigation.navigate('Estacionamento', { vehicleType: 'carro', id_lugar:1 })}/>
         </View>
 
         <View style={styles.vehicle}>
           <Image source={require("../../assets/Imgs/motoMenu.jpg")} style={styles.vehicleImage} />
           <Texto msg={"MOTO"} tamanho={16} />
-          <Button width={120} borda={30} height={50} color={"#73D2C0"} texto={">>>"} acao={navigateToEstacionamentoMoto}/>
+          <Button width={120} borda={30} height={50} color={"#73D2C0"} texto={">>>"} acao={() => navigation.navigate('Estacionamento', { vehicleType: 'moto', id_lugar:2 })}/>
         </View>
       </View>
     </ScrollView>
@@ -149,6 +187,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     padding: 20,
+  },
+  markerImage: {
+    width: 80,
+    height: 80,
+    resizeMode: 'contain',
   },
   searchContainer: {
     flexDirection: "row",
