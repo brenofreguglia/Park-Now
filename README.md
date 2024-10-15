@@ -2,6 +2,10 @@
 
 **Park-Now** é um aplicativo desenvolvido em **Expo Go** e **React Native**, focado em facilitar a busca e reserva de vagas de estacionamento. O app oferece uma interface intuitiva e prática, permitindo que os usuários realizem todo o processo de busca e reserva diretamente pelo celular, de forma simples e segura.
 
+  ```bash
+   O Aplicativo esta em fase de Desenvolvimento ainda, nao chegou na sua versão final!!!!!
+   ```
+
 ## Funcionalidades
 
 - **Autenticação de Usuários**: 
@@ -75,7 +79,7 @@
 
 ## Contribuição
 
-Sinta-se à vontade para enviar pull requests, relatar problemas ou sugerir melhorias. O objetivo é tornar o Park-Now cada vez mais eficiente para os usuários.
+Sinta-se à vontade para enviar pull requests, relatar problemas ou sugerir melhorias. O objetivo é tornar o Park-Now cada vez mais eficiente para os usuários. 
 
 ---
 
