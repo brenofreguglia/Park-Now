@@ -6,7 +6,11 @@ const bodyparser = require('body-parser')
 const nodemailer = require('nodemailer');
 
 
+
 const app = express()
+
+require('dotenv').config() 
+
 const porta = 3000
 app.use(cors())
 app.use(bodyparser.json())
@@ -542,4 +546,4 @@ app.post('/cadastro/local', async (req, res) => {
     }
 }) */
 
-app.listen(porta, () => console.log(`ver rodando em porta ${porta}`))
+app.listen(process.env.SERVE, () => console.log(`ver rodando em porta ${process.env.SERVE}`))

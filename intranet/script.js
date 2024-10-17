@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
             loginButton.disabled = true;
 
             try {
-                const response = await fetch('http://10.111.9.39:3000/login', {
+                const response = await fetch('http://localhost:443/login', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
