@@ -90,7 +90,71 @@ const validateFields = (data) => {
     return null;
 };
 
-// Rota para cadastrar o cliente
+const validateFields1 = (data) => {
+    const { tipo_veiculo, placa, marca, modelo, cor } = data;
+
+    const placaRegex = /^[A-Z]{3}-\d{4}$/; // Padrão de placas: 3 letras e 4 números
+    const modeloMarcaCorRegex = /^[A-Za-zÀ-ÖØ-öø-ÿ0-9\s]+$/; // Apenas letras, números e espaços permitidos
+
+    if (!tipo_veiculo || (tipo_veiculo !== 1 && tipo_veiculo !== 2)) {
+        return 'Tipo de veículo inválido. Deve ser carro ou moto.';
+    }
+    if (!placaRegex.test(placa)) {
+        return 'Placa inválida. Deve estar no formato ABC-1234.';
+    }
+    if (!modeloMarcaCorRegex.test(marca)) {
+        return 'Marca inválida. Não deve conter caracteres especiais.';
+    }
+    if (!modeloMarcaCorRegex.test(modelo)) {
+        return 'Modelo inválido. Não deve conter caracteres especiais.';
+    }
+    if (!modeloMarcaCorRegex.test(cor)) {
+        return 'Cor inválida. Não deve conter caracteres especiais.';
+    }
+
+    return null; // Retorna null se não houver erros
+};
+
+
+// Rota para cadastrar o veiculo do cliente
+app.post('/cadastro_veiculo', async (req, res) => {
+    try {
+        const { tipo_veiculo, placa, marca, modelo, cor,} = req.body;
+
+
+        // Verificação de campos vazios
+        if (!tipo_veiculo || !placa || !marca || !modelo || !cor) {
+            return res.status(400).json({ error: 'Todos os campos são obrigatórios' });
+        }
+        
+        // Validação dos dados
+        const validationError1 = validateFields1({ tipo_veiculo, placa, marca, modelo, cor,});
+        if (validationError1) {
+            return res.status(400).json({ error: validationError1 });
+        }
+
+        // Obtém uma conexão do pool
+        const conect = await pool.getConnection();
+
+        // Prepara e executa a consulta SQL com parâmetros
+        
+        // const sql = `INSERT INTO automovel (tipo_veiculo, placa, marca, modelo, cor) VALUES (?, ?, ?, ?, ?)`;
+        const sql = `INSERT INTO automovel (tipo_veiculo, placa, marca, modelo, cor) VALUES (?, ?, ?, ?, ?)`;
+        console.log(sql)
+        const [result] = await conect.execute(sql, [tipo_veiculo, placa, marca, modelo, cor,]);
+        
+        // Libera a conexão
+        conect.release();
+
+        // Retorna uma resposta de sucesso
+        res.json({ msg: 'Registro gravado com sucesso!' });
+
+    } catch (error) {
+        console.error(`Ocorreu um erro: ${error}`);
+        res.status(500).json({ error: 'Erro ao realizar o cadastro. Por favor, tente novamente mais tarde.' });
+    }
+});
+
 app.post('/cadastro', async (req, res) => {
     try {
         const { nome, sobrenome, cpf, endereco, cep, telefone, email, senha } = req.body;

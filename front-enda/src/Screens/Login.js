@@ -6,7 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const { width, height } = Dimensions.get('window');
-const rota = "http://10.111.9.26:3000";
+const rota = "http://10.111.9.20:3000";
 // const rota = "http://192.168.192.172:3000";
 
 export default function Login() {
@@ -35,7 +35,7 @@ export default function Login() {
 
       if (contentType && contentType.includes("application/json")) {
         const data = await response.json();
-        console.log(data);
+         console.log(data);
         if (response.ok) {
           if (data.id) {
             await AsyncStorage.setItem('isLoggedIn', 'true');
