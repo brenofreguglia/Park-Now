@@ -4,6 +4,7 @@ const crypto = require('crypto')
 const mysql = require('mysql2/promise')
 const bodyparser = require('body-parser')
 const nodemailer = require('nodemailer');
+const { errorMonitor } = require('events')
 
 
 
@@ -511,32 +512,20 @@ app.get('/vagas', async (req, res) => {
   });
   
 
-
-
-
-// // Rota para obter a quantidade de vagas de um local específico
-// app.get('/local/:id/vagas', (req, res) => {
-//   const localId = req.params.id;
-
-//   const query = 'SELECT vagas FROM local WHERE id_lugar = ?';
-//   db.query(query, [localId], (err, results) => {
-//     if (err) {
-//       console.error('Erro ao buscar vagas:', err);
-//       res.status(500).json({ error: 'Erro ao buscar vagas.' });
-//       return;
-//     }
-
-//     if (results.length > 0) {
-//       res.json({ vagas: results[0].vagas });
-//     } else {
-//       res.status(404).json({ error: 'Local não encontrado.' });
-//     }
-//   });
-// });
-
-// app.listen(port, () => {
-//   console.log(`Servidor rodando na porta ${port}`);
-// });
+// Rota para buscar locais
+app.get('/api/locais', async (req, res) => {
+    console.log('Requisição recebida para /api/locais');
+    try {
+        // Usando promises
+        const [results] = await pool.query('SELECT * FROM local');
+        res.status(200).json(results); // Retorna os resultados diretamente
+    } catch (error) {
+        console.error('Erro ao buscar locais:', error);
+        res.status(500).json({ error: 'Erro ao buscar locais.' });
+    }
+});
+ 
+ 
 
 // ROTA PRA CADASTRAR O LOCAL 
 app.post('/cadastro/local', async (req, res) => {

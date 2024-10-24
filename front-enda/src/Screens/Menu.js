@@ -7,16 +7,12 @@ import MapView, { Marker } from 'react-native-maps';
 import Toast from 'react-native-toast-message';
 import * as Location from 'expo-location';
 
+const rota = "http://10.111.9.26:3000";
+
 export default function Menu() {
   const route = useRoute();
   const { user } = route.params || {};
   const navigation = useNavigation();
-
-  const locais = [
-    { id: 1, latitude: -22.13151, longitude: -51.39025, title: 'Estacionamento 1' },
-    { id: 2, latitude: -22.1200, longitude: -51.3850, title: 'Estacionamento 2' },
-    { id: 3, latitude: -22.1250, longitude: -51.3800, title: 'Local 3' },
-  ];
 
   const [search, setSearch] = useState('');
   const [region, setRegion] = useState({
@@ -27,6 +23,7 @@ export default function Menu() {
   });
   const [markerLocation, setMarkerLocation] = useState(null);
   const [origin, setOrigin] = useState(null);
+  const [locais, setLocais] = useState([]);
   const mapRef = useRef(null);
 
   useEffect(() => {
@@ -65,6 +62,21 @@ export default function Menu() {
     };
 
     getUserLocation();
+  }, []);
+
+  useEffect(() => {
+    const fetchLocais = async () => {
+      try {
+        const response = await fetch(`${rota}/api/locais`); // URL do seu backend
+        const data = await response.json();
+        setLocais(data);
+      } catch (error) {
+        console.error('Erro ao buscar locais:', error);
+        Alert.alert('Erro', 'Não foi possível carregar os locais.');
+      }
+    };
+
+    fetchLocais();
   }, []);
 
   const handleSearch = async () => {
@@ -107,18 +119,17 @@ export default function Menu() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <View style={styles.searchContainer}>
-        <TextInput 
-          style={styles.searchInput}
-          placeholder="🔎 Busca"
-          value={search}
-          onChangeText={setSearch}
-        />
-        <TouchableOpacity style={styles.searchButton} onPress={handleSearch}>
-          <Text style={styles.searchButtonText}>OK</Text>
-        </TouchableOpacity>
-      </View>
-
+    <View style={styles.searchContainer}>
+    <TextInput 
+      style={styles.searchInput}
+      placeholder="🔎 Busca"
+      value={search}
+      onChangeText={setSearch}
+    />
+    <TouchableOpacity style={styles.searchButton} onPress={handleSearch}>
+      <Text style={styles.searchButtonText}>OK</Text>
+    </TouchableOpacity>
+  </View>
       <View style={styles.container_geo}>
         <MapView
           ref={mapRef}
@@ -129,13 +140,13 @@ export default function Menu() {
           {/* Marcadores dos locais */}
           {locais.map((local) => (
             <Marker
-              key={local.id}
-              coordinate={{ latitude: local.latitude, longitude: local.longitude }}
-              title={local.title}
-              onPress={() => openGoogleMaps(local)}  // Abre o Google Maps ao clicar no marcador
+              key={local.id_lugar}
+              coordinate={{ latitude: parseFloat(local.latitude), longitude: parseFloat(local.longitude)  }}
+              title={local.nome}
+              onPress={() => openGoogleMaps(local)} 
             >
               <Image
-                source={require('../../assets/Imgs/customMarker.png')}  // Imagem customizada do marcador
+                source={require('../../assets/Imgs/customMarker.png')} 
                 style={styles.markerImage}
               />
             </Marker>
@@ -148,7 +159,7 @@ export default function Menu() {
               title="Localização Pesquisada"
             >
               <Image
-                source={require('../../assets/Imgs/customMarker.png')}  // Imagem customizada para o marcador da localização
+                source={require('../../assets/Imgs/customMarker.png')} 
                 style={styles.markerImage}
               />
             </Marker>
