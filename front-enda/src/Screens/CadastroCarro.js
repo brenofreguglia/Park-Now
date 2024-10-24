@@ -3,6 +3,8 @@ import { Image, View, Text, TextInput, Switch, TouchableOpacity, StyleSheet, Ale
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
 
+const rota = "http://10.111.9.26"
+
 export default function CadastroVeiculo() {
   const navigation = useNavigation();
   const [isCar, setIsCar] = useState(true);  // Estado para controlar tipo de veículo (carro ou moto)
@@ -38,7 +40,7 @@ export default function CadastroVeiculo() {
 
     try {
         console.log("clicou");
-      const response = await fetch(`http://10.111.9.20:3000/cadastro_veiculo`, {
+      const response = await fetch(`${rota}:3000/cadastro_veiculo`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

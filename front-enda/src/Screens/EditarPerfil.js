@@ -5,7 +5,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const rota = "http://10.111.9.20:3000";
+const rota = "http://10.111.9.26:3000";
 const screenHeight = Dimensions.get('window').height; // Use 'window' para obter a área disponível sem status bar
 const screenWidth = Dimensions.get('window').width;
 
@@ -74,8 +74,19 @@ export default function EditarPerfil() {
 
   const validateFields = () => {
     const newErrors = {};
-    if (!name) newErrors.name = 'Nome é obrigatório.';
-    if (!sobrenome) newErrors.sobrenome = 'Sobrenome é obrigatório.';
+       // Validação do nome
+       if (!name) {
+        newErrors.name = 'Nome é obrigatório.';
+    } else if (/\d/.test(name)) {
+        newErrors.name = 'Nome não pode conter números.';
+    }
+
+    // Validação do sobrenome
+    if (!sobrenome) {
+        newErrors.sobrenome = 'Sobrenome é obrigatório.';
+    } else if (/\d/.test(sobrenome)) {
+        newErrors.sobrenome = 'Sobrenome não pode conter números.';
+    }
     if (!email.includes('@')) newErrors.email = 'E-mail inválido.';
     if (senha.length < 8) newErrors.senha = 'A senha deve ter pelo menos 8 caracteres, incluindo uma letra maiúscula, uma letra minúscula, um número e um caractere especial.';
     if (!/^\d{11}$/.test(numero)) newErrors.numero = 'Telefone inválido.';

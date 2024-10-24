@@ -4,7 +4,7 @@ import axios from 'axios';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native'; 
 
-const rota = "http://192.168.192.172:3000"
+const rota = "http://192.168.144.172:3000"
 // const rota = "http://10.111.9.20:3000"
 
 const { height, width } = Dimensions.get('window'); // Obter altura e largura da tela

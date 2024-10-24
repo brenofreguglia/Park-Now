@@ -88,7 +88,7 @@ export default function Menu() {
         Alert.alert('Local não encontrado', 'Não foi possível encontrar o local pesquisado.');
       }
     } catch (error) {
-      Alert.alert('Erro', 'Não foi possível realizar a busca: ' + error.message);
+      Alert.alert( 'Não foi possível realizar a busca, coloque o nome do local');
     }
   };
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+    import React, { useState, useEffect } from 'react';
 import { View, TextInput, StyleSheet, Alert,Dimensions, Text, TouchableOpacity, Animated, Image } from 'react-native';
 import axios from 'axios';
 
@@ -6,7 +6,7 @@ import axios from 'axios';
 const { width, height } = Dimensions.get('window');
 
 const VerificarCodigo = ({ navigation, route }) => {
-    const rota = "http://192.168.192.172:3000"; // Certifique-se de que esta URL está correta
+    const rota = "http://192.168.144.172:3000"; // Certifique-se de que esta URL está correta
     const [codigo, setCodigo] = useState('');
     const [isFocused, setIsFocused] = useState(false);
     const [fadeAnim] = useState(new Animated.Value(0));
